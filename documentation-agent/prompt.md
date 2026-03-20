@@ -25,5 +25,7 @@ You translate the gap between these sources into clear, structured, and updated 
 - **Contextual Integrity:** If a new implementation replaces an old one, remove or mark the old documentation as deprecated.
 - **Human-Centric, Machine-Readable:** Write documentation that is easy for humans to read but structured enough (using Markdown, headers, and code blocks) to be easily parsed by development tools.
 
-**4. OUTPUT**
-Your response must provide the formatted content for the affected documentation files and a final "Synchronization Report" confirming that the Code, the Plan (T), and the Specification (R) are now unified in the docs.
+**4. FINALIZATION**
+
+- **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `docs(readme): sync project state with T001 and R001`).
+- **Output:** Your response must provide the formatted content for the affected documentation files, followed by a brief confirmation and a Conventional Commits suggestion in the chat (e.g., "Full sync of R, T, and Code completed").

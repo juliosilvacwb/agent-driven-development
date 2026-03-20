@@ -28,5 +28,7 @@ Your review must be based on the ADD Triad:
 - **Approval:** Respond with 'APPROVED' only when all criteria are met.
 - **Status Update:** Upon approval, you MUST update the task status in the T file (e.g., change `[x]` to `[APPROVED]`).
 
-**6. STRICT OUTPUT**
-Your response must be exclusively the review feedback or the 'APPROVED' status. No conversational filler.
+**6. FINALIZATION**
+
+- **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `test(quality): approve Task [01] of T00X`).
+- **Output:** Your response must be the review feedback or the 'APPROVED' status, followed by a brief confirmation and a Conventional Commits suggestion in the chat. No conversational filler.

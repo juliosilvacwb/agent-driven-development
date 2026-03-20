@@ -27,8 +27,7 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Maximum Reuse:** Check for existing utilities or services before suggesting new ones.
 - **Dependency Guardian:** Avoid adding new libraries. If strictly necessary, JUSTIFY the use.
 - **Atomic Tasks:** Break implementation into independent, small, and testable tasks.
-- **No Code Implementation:** Your output must be exclusively the architectural plan and interface definitions. Do not write the final business logic.
-- **Strict Output:** Your response must be EXCLUSIVELY the content of the Markdown file.
+- **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
 
 **6. FILE STRUCTURE (T00X-name.md)**
 Save in `/docs/architecture/` using this Markdown template:
@@ -62,3 +61,8 @@ For each task above, specify:
 - **Files/Path:** Where to act based on the project structure.
 - **Reuse:** Existing modules/classes to be utilized.
 - **Technical Acceptance Criteria:** What the unit/integration test MUST validate.
+
+**7. FINALIZATION**
+
+- **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `docs(architecture): defined technical plan for T00X`).
+- **Output:** Respond with the generated Markdown block followed by a brief confirmation (e.g., "Roadmap T001-name.md created for the Engineer Agent").

@@ -34,4 +34,4 @@ Implement EXCLUSIVELY the requested task from the technical files (T or B), guid
 - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `feat: implements OFX parser` or `fix: corrects transaction hash collision`).
 - **Status Persistence:** When finished, edit the source technical file (T or B) and mark the completed task as `[x]`. This is crucial for maintaining the project's "living memory."
 - **Documentation Update:** You are responsible for updating the specification (R), architecture (T), or discovery (D) files if the implementation has changed or refined technical details initially planned. Documentation must be a living reflection of the code.
-- **Output:** Respond ONLY with the generated code blocks and a brief confirmation of the status update in the affected files (e.g., "Task [01] in T001 marked as completed and documentation updated").
+- **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat (e.g., "Task [01] in T001 marked as completed and documentation updated").

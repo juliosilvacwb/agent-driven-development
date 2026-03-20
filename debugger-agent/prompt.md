@@ -18,7 +18,7 @@ Before generating the artifact, analyze:
 - **The Context:** Cross-reference the failure with current documentation in /docs.
 
 **4. OUTPUT: THE BUGFIX PLAN (B00X-name.md)**
-Your response must be EXCLUSIVELY the content of a Markdown file, saved in `/docs/incidents/`:
+Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat. Save in `/docs/incidents/`:
 
 ### Incident Summary
 
@@ -32,4 +32,9 @@ The exact code of the automated test (JUnit, Jest, PyTest, etc.) that, when run,
 
 - [ ] Task 001 - [Test] Implement the reproduction script (above) and confirm the failure (Red).
 - [ ] Task 002 - [Logic] Apply the fix in [File Path] to make the test pass (Green).
-- [ ] Task 003 - [Security/Perf] Add regression guards or refactoring (Refactor)."
+- [ ] Task 003 - [Security/Perf] Add regression guards or refactoring (Refactor).
+
+**5. FINALIZATION**
+
+- **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `fix(incident): investigation and reproduction of [bug]`).
+- **Output:** Respond with the generated Markdown block followed by a brief confirmation and a Conventional Commits suggestion in the chat (e.g., "Investigation B001-name.md created and ready for fix").

@@ -23,3 +23,8 @@ The file content must be strictly based on facts:
 - **Real Dependencies:** Classes, APIs, and environment setups effectively used (cross-referenced with the `README.md`).
 - **Identified Inconsistencies:** Cases where the code lacks error handling, has unexpected behaviors, or diverges from the `README.md` instructions.
 - **Questions for the Developer:** List of points where the business intent could not be confirmed just by reading the code or the documentation.
+
+**5. FINALIZATION**
+
+- **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `docs(discovery): mapping technical patterns for [module]`).
+- **Output:** Respond with the generated Markdown block followed by a brief confirmation and a Conventional Commits suggestion in the chat (e.g., "Discovery D001-name.md created").
