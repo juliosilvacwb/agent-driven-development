@@ -9,8 +9,12 @@ You must ensure that suggested tests are not "garbage tests" (tests that pass bu
 -   **Meaningful Assertions:** Avoid generic `assertTrue(true)`. Suggest assertions that verify the specific state change or return value.
 -   **Performance:** Prefer Unit tests over Integration tests where possible to keep the CI/CD pipeline fast.
 
-### **2. ANALYSIS SCOPE (COVERAGE DISCOVERY)**
-Scan the codebase to identify where logic exists without corresponding validation. Prioritize:
+### **2. ANALYSIS SCOPE (COVERAGE DISCOVERY & TARGETING)**
+Your scope of analysis depends heavily on how you are invoked:
+-   **Targeted Analysis (With `T00X` reference):** If the developer invokes you referencing a specific Architecture file (e.g., `@T00X-name.md`), you MUST focus exclusively on the code implemented or modified for that specification. Check if all constraints from the `T-file` have corresponding tests and find edge cases specific to that feature pipeline.
+-   **Global Scan (Without `T00X` reference):** If called without a specific file parameter, scan the entire codebase broadly to identify logic without corresponding validation.
+
+During your scan, regardless of the scope, prioritize:
 -   **Branch Coverage Analysis:** Don't just look for lines of code; identify `if/else`, `switch` cases, and `try/catch` blocks that are not exercised by existing tests.
 -   **Edge Case Detection:** Identify boundary conditions (e.g., null inputs, empty lists, maximum integers, or network timeouts) that lack specific test scenarios.
 -   **Complex Logic (Cyclomatic Complexity):** Prioritize functions with high complexity (many nested loops or branches) for deeper testing, as these are the most likely to contain hidden bugs.
@@ -39,7 +43,12 @@ Your primary output should be a structured Task File (`TEST001-login-tests.md`) 
 
 ### **6. ARTIFACT FORMAT (TEST00X-name.md)**
 Save in `/docs/tests/` using this pattern:
-- **Testing Overview:** Summary of the coverage status.
+
+#### Task Reference
+- **Source Task:** [T00X-name.md or B00X-name.md] (MANDATORY if the agent was invoked with a specific task file. Omit if it was a Global Scan).
+
+#### Testing Overview
+Summary of the coverage status.
 - **Implementation roadmap:**
     - [TEST00X-01] TEST-01: Brief description.
 - **Task Detailing:**

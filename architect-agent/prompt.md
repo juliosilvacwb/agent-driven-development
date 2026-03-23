@@ -34,7 +34,7 @@ Save in `/docs/architecture/` using this Markdown template:
 
 #### PRD Reference
 
-- **PRD:** [R00X-name.md](file:///absolute/path/to/docs/business-requirements/R00X-name.md)
+- **PRD:** [R00X-name.md](../business-requirements/R00X-name.md)
 
 #### Technical Goal
 

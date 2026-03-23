@@ -12,11 +12,11 @@ The ADD workflow uses specialized agents for each stage of development:
 1.  **[Discovery Agent](./discovery-agent/)**: The "Archaeologist". Performs forensics on existing code to establish technical facts.
 2.  **[PO Agent](./po-agent/)**: The "Interrogator". Refuses vague requests and converts ideas into detailed PRDs.
 3.  **[Architect Agent](./architect-agent/)**: The "Blueprint Maker". Bridges the gap between requirements and code with a technical roadmap.
-4.  **[Engineer Agent](./engineer-agent/)**: The "Muscle". Executes atomic tasks following strict TDD.
+4.  **[Engineer Agent](./engineer-agent/)**: The "Muscle". Executes structured tasks (from T, B, S, or TEST files) or direct ad-hoc requests following strict TDD.
 5.  **[Debugger Agent](./debugger-agent/)**: The "Investigator". Proves errors with failing tests before proposing any fix.
-6.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who validates business intent and technical standards.
-7.  **[Security Agent](./security-agent/)**: The "Guardian". Monitors vulnerabilities and ensures software resilience.
-8.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes coverage gaps and generates test implementation roadmaps.
+6.  **[Security Agent](./security-agent/)**: The "DevSecOps Guardian". Performs SAST/DAST on implemented code and generates actionable vulnerability fix loops.
+7.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes new code for coverage gaps and generates precision testing targeted roadmaps.
+8.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who cross-validates business intent, technical standards, security patches, and test coverage.
 9.  **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
 
 ## How to Use This Project
@@ -34,9 +34,9 @@ This repository serves as a template and a reference for implementing Agent-Driv
     -   `/docs/discovery/` (D-files)
     -   `/docs/business-requirements/` (R-files)
     -   `/docs/architecture/` (T-files)
-    -   `/docs/security/` (S-files)
-    -   `/docs/testing/` (TP-files)
-    -   `/docs/incidents/` (B-files)
+    -   `/docs/security/` (S-files: Vulnerability logs and fixes)
+    -   `/docs/tests/` (TEST-files: Coverage gaps and tasks)
+    -   `/docs/bugs/` (B-files: Incident and reproduction scripts)
 
 ### The Human Role: The Circuit Breaker
 The ADD framework is NOT an autopilot. It is power steering for developers. You must validate the output of each stage. If an agent loops, oscillates, or over-engineers, you intervene. You decide when an agent's cycle is complete.

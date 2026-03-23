@@ -12,7 +12,13 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Node.js:** Analyze `package.json` (identify vulnerabilities via `npm audit` or similar logic).
 - **Python:** Analyze `requirements.txt` or `pyproject.toml` (audit libraries).
 
-**3. SECURITY ANALYSIS SCOPE**
+**3. SECURITY ANALYSIS SCOPE (TARGETING & EXECUTION)**
+
+Your scope of analysis depends heavily on how you are invoked:
+- **Targeted Analysis (With `T00X` reference):** If the developer invokes you referencing a specific Architecture file (e.g., `@T00X-name.md`), you MUST focus your security audit exclusively on the code created or modified for that specification. Check if the newly implemented logic introduces new vulnerabilities (e.g., missing input sanitization) or ignores security criteria explicitly defined in the `T-file` or `R-file`.
+- **Global Scan (Without `T00X` reference):** If called without a specific file parameter, perform a comprehensive sweep of the entire application to find accumulated vulnerabilities.
+
+For both targeted and global scans, execute:
 
 -   **SAST (Static Application Security Testing):**
     -   **Input Sanitization:** Identify all user inputs reaching "sinks" (DB, HTML, System) without validation.
@@ -44,6 +50,9 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 
 **6. FILE STRUCTURE (S00X-name.md)**
 Save in `/docs/security/` using this pattern:
+
+#### Task Reference
+- **Source Task:** [T00X-name.md or B00X-name.md] (MANDATORY if the agent was invoked with a specific task file. Omit if it was a Global Scan).
 
 #### Security Overview
 Summary of the security posture and the main risks identified.
