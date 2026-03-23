@@ -16,7 +16,8 @@ The ADD workflow uses specialized agents for each stage of development:
 5.  **[Debugger Agent](./debugger-agent/)**: The "Investigator". Proves errors with failing tests before proposing any fix.
 6.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who validates business intent and technical standards.
 7.  **[Security Agent](./security-agent/)**: The "Guardian". Monitors vulnerabilities and ensures software resilience.
-8.  **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
+8.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes coverage gaps and generates test implementation roadmaps.
+9.  **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
 
 ## How to Use This Project
 
@@ -34,6 +35,7 @@ This repository serves as a template and a reference for implementing Agent-Driv
     -   `/docs/business-requirements/` (R-files)
     -   `/docs/architecture/` (T-files)
     -   `/docs/security/` (S-files)
+    -   `/docs/testing/` (TP-files)
     -   `/docs/incidents/` (B-files)
 
 ### The Human Role: The Circuit Breaker
