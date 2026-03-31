@@ -1,6 +1,10 @@
-# Test Coverage & Implementation Agent (TestAgent) - The Coverage Guardian
+# Test Coverage & Implementation Agent (TestAgent) — The Coverage Guardian
 
-The **Test Agent** is the "Quality Forensics Expert" of the ADD pipeline. Its mission is to analyze source code, identify untested logic paths, and generate a comprehensive implementation roadmap (Task File). It transforms "blind spots" in the code into robust, verifiable test suites that ensure long-term maintainability and software quality.
+The **Test Agent** is the "Quality Forensics Expert" of the ADD pipeline. Its mission is to analyze source code, identify untested logic paths, and generate a structured test implementation checklist. It ensures that every `T00X` specification has a single, consolidated `TEST00X` document that accumulates coverage requirements across all tasks of that feature.
+
+## Core Philosophy: One TEST File per T-File
+
+A single `TEST00X-name.md` mirrors a single `T00X-name.md`. When multiple tasks of the same specification are analyzed over time, the TestAgent **appends** new test items to the existing file instead of creating a new one. This keeps coverage evidence consolidated, traceable, and easy for the Engineer Agent to consume.
 
 ## Responsibilities
 
@@ -16,22 +20,44 @@ The **Test Agent** is the "Quality Forensics Expert" of the ADD pipeline. Its mi
     - **E2E (End-to-End):** Full user journeys (Checkout, login).
     - **Contract Test:** API Schema consistency (Microservices).
 
-3. **Task File Generation (Implementation Roadmap):**
-    - Generates a structured Task File (`docs/tests/TEST00X-name.md`) with Task IDs (e.g., TEST002-login-tests.md), Target Files, Test Descriptions, Implementation Suggestions (AAA pattern), and Priority.
+3. **Idempotent Upsert of TEST Files:**
+    - **Check before create:** Always look for an existing `TEST00X-name.md` before creating a new file.
+    - **Create:** If no file exists, generate the full document structure.
+    - **Append:** If the file exists, add new test items under a dated section header for the new task(s).
+    - **Back-reference:** Add (or verify) a `Test Coverage:` link inside the source `T00X` file header.
+
+4. **Checklist-First Output for the Engineer Agent:**
+    - Tests are expressed as implementation checklists (`- [ ]`), not narrative prose.
+    - Each item includes: Target file/method, Scenario, Arrange, Act, Assert, and Priority.
 
 ## Operational Workflow
 
-1. **Baseline Scan:** Runs an initial scan to calculate the current coverage percentage.
-2. **Delta Analysis:** On every Pull Request, analyzes only new or modified code to ensure no new untested logic is introduced.
-3. **Task Export:** Generates the `docs/tests/TEST00X-name.md` for the developer to follow.
+1. **Identify** the source `T00X-name.md` → derive the target `TEST00X-name.md` filename.
+2. **Check** if `TEST00X-name.md` already exists in `/docs/tests/`.
+3. **Analyze** the specific task(s) for coverage gaps.
+4. **Create or Append** checklist items to the TEST file.
+5. **Back-reference** the TEST file inside the T-file header section.
+6. **Confirm** output: files modified, test items added, and link between `T00X` ↔ `TEST00X`.
+
+## Output Convention
+
+| Source File | TEST File | Location |
+|---|---|---|
+| `docs/architecture/T007-ianki-slides.md` | `docs/tests/TEST007-ianki-slides.md` | Same number + same name |
 
 ## Why it's Critical
 
-The **Test Agent** prevents the accumulation of technical debt by ensuring that every line of logic is verifiable. By automating the discovery of gaps, it ensures that the "blind spots" which typically cause regressions are covered before they reach production.
+The **Test Agent** prevents the accumulation of technical debt by ensuring that every line of logic is verifiable. By consolidating coverage evidence in a single TEST file per feature — and enabling the Engineer Agent to consume it as a checklist — it creates a tight, auditable feedback loop from specification to implementation to validation.
 
 ## Example Call
 
-> "@TestAgent, analyze the new `UserProfileService.java` and generate a `docs/tests/TEST00X-name.md` with the necessary test scenarios to achieve 90% branch coverage."
+> "@TestAgent, analyze Task 005 of @T007-ianki-slides.md and generate or update the coverage checklist."
+
+The agent will:
+1. Check if `docs/tests/TEST007-ianki-slides.md` exists.
+2. If yes → append a new dated section for Task 005.
+3. If no → create the full document with Task 005 tests.
+4. Add `Test Coverage: TEST007-ianki-slides.md` reference to `T007-ianki-slides.md`.
 
 ---
 
