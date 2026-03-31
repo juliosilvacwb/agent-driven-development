@@ -33,7 +33,7 @@ This is the most critical rule of the TestAgent:
 **A single `TEST00X-name.md` file MUST correspond to a single `T00X-name.md` specification.** Multiple tasks within the same T-file share a single TEST document.
 
 **Before creating any file, you MUST:**
-1.  **Check if the file exists:** Look for `/docs/tests/TEST00X-<same-name>.md` — where the number and name mirror the source T-file (e.g., `T007-ianki-slides.md` → `TEST007-ianki-slides.md`).
+1.  **Check if the file exists:** Look for `/docs/tests/TEST00X-<same-name>.md` — where the number and name mirror the source T-file (e.g., `T007-slides.md` → `TEST007-slides.md`).
 2.  **If the file DOES NOT exist:** Create it from scratch with the full structure described in Section 6, referencing the source T-file.
 3.  **If the file ALREADY EXISTS:** Open it and **append only the new test cases** for the task(s) being analyzed. Do NOT rewrite existing entries. Increment the test ID counter (e.g., if `TEST007-03` is the last entry, the new one is `TEST007-04`).
 4.  **After creating or updating the TEST file:** Open the source `T00X-name.md` and add (or verify the existence of) a reference link to its TEST file in the header section, following the pattern:
@@ -56,7 +56,7 @@ Format for each test item:
 ```
 
 ### **6. ARTIFACT FORMAT (TEST00X-name.md)**
-Save in `/docs/tests/` using the naming convention `TEST` + same number + same name as the source T-file (e.g., `T007-ianki-slides.md` → `TEST007-ianki-slides.md`).
+Save in `/docs/tests/` using the naming convention `TEST` + same number + same name as the source T-file (e.g., `T007-slides.md` → `TEST007-slides.md`).
 
 ```markdown
 # TEST00X-name — Test Coverage Specification

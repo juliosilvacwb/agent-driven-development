@@ -27,7 +27,7 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 
 | Source File | S-File (Security) | Location |
 |---|---|---|
-| `docs/architecture/T007-ianki-slides.md` | `docs/security/S007-ianki-slides.md` | Same number + same name |
+| `docs/architecture/T007-slides.md` | `docs/security/S007-slides.md` | Same number + same name |
 
 ## Why it's Critical
 

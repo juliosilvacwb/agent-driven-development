@@ -43,7 +43,7 @@ A single `TEST00X-name.md` mirrors a single `T00X-name.md`. When multiple tasks 
 
 | Source File | TEST File | Location |
 |---|---|---|
-| `docs/architecture/T007-ianki-slides.md` | `docs/tests/TEST007-ianki-slides.md` | Same number + same name |
+| `docs/architecture/T007-slides.md` | `docs/tests/TEST007-slides.md` | Same number + same name |
 
 ## Why it's Critical
 
@@ -51,13 +51,13 @@ The **Test Agent** prevents the accumulation of technical debt by ensuring that 
 
 ## Example Call
 
-> "@TestAgent, analyze Task 005 of @T007-ianki-slides.md and generate or update the coverage checklist."
+> "@TestAgent, analyze Task 005 of @T007-slides.md and generate or update the coverage checklist."
 
 The agent will:
-1. Check if `docs/tests/TEST007-ianki-slides.md` exists.
+1. Check if `docs/tests/TEST007-slides.md` exists.
 2. If yes → append a new dated section for Task 005.
 3. If no → create the full document with Task 005 tests.
-4. Add `Test Coverage: TEST007-ianki-slides.md` reference to `T007-ianki-slides.md`.
+4. Add `Test Coverage: TEST007-slides.md` reference to `T007-slides.md`.
 
 ---
 
