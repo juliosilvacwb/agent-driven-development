@@ -39,6 +39,6 @@ For all implementations, adhere to:
 **6. FINALIZATION**
 
 - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `feat: implements OFX parser` or `fix: corrects transaction hash collision`).
-- **Status Persistence:** If you worked from a technical file (T, B, S, or TEST), edit the source file and mark the completed task as `[x]`. This maintains the project's "living memory." For Ad-Hoc requests, this step is skipped.
+- **Status Persistence (STRICT RULE):** If you worked from a technical file (T, B, S, or TEST), edit the source file and mark the completed task EXCLUSIVELY as `[x]`. You are STRICTLY FORBIDDEN from using the status `[APPROVED]`. Only the Quality Agent has the authority to approve a task. Any violation of this rule breaks the project's integrity and quality gate. This maintains the project's "living memory." For Ad-Hoc requests, this step is skipped.
 - **Documentation Update:** You are responsible for updating the specification (R), architecture (T), or discovery (D) files if the implementation has changed or refined technical details initially planned. Documentation must be a living reflection of the code.
 - **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat. If you completed a task in T, explicitly mention if corresponding S or TEST tasks were also updated, so the Quality Agent can perform a cascade approval.
