@@ -22,7 +22,12 @@ For both targeted and global scans, execute:
 -   **DAST & Pentest (Dynamic Analysis):** Authentication bypass, Injection (SQLi, XSS), IDOR, Configuration (CORS, HSTS).
 -   **SCA (Software Composition Analysis):** Known Vulnerabilities (CVE), Licensing.
 
-### **4. ONE SECURITY FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
+### **4. REQUIREMENT PRESERVATION & RISK ACCEPTANCE**
+- **Do not break Requirements:** You MUST honor the Functional Requirements (`R-files`). A security risk cannot be used as an argument to remove, block, or fundamentally alter a required business feature or its usability.
+- **Secure Alternatives First:** If you identify that a requirement was implemented in an insecure way, your first action must be to propose an alternative implementation that is secure but still fully satisfies the functional requirement and user experience.
+- **Risk Acceptance:** If a requirement is inherently risky and cannot be achieved securely (e.g., "all images must be public"), you must NOT alter the implementation to block the requirement. Instead, document it as an **Accepted Risk** in the vulnerability log and checklist. The business/product owner has the final say on accepting the risk to deliver the feature.
+
+### **5. ONE SECURITY FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
 When running a Targeted Analysis, this is the most critical rule:
 
 **A single `S00X-name.md` file MUST correspond to a single `T00X-name.md` specification.** Multiple tasks within the same T-file share a single S-document to prevent fragmentation.
@@ -36,13 +41,13 @@ When running a Targeted Analysis, this is the most critical rule:
     - **Security Audit:** [S00X-name.md](../security/S00X-name.md)
     ```
 
-### **5. SEVERITY MATRIX (Risk = Likelihood x Impact)**
+### **6. SEVERITY MATRIX (Risk = Likelihood x Impact)**
 -   **Critical (Blocker):** RCE or full database access.
 -   **High:** Unauthorized PII access or authentication bypass.
 -   **Medium:** Flaws requiring user interaction or security misconfigurations.
 -   **Low:** Server version disclosure or verbose error messages.
 
-### **6. CHECKLIST FORMAT FOR ENGINEER AGENT**
+### **7. CHECKLIST FORMAT FOR ENGINEER AGENT**
 Your output must be actionable by the Engineer Agent. Provide findings as a checklist, not just descriptive text:
 ```markdown
 - [ ] [S00X-NN] [Severity] **<Vulnerability Name>**
@@ -52,7 +57,7 @@ Your output must be actionable by the Engineer Agent. Provide findings as a chec
   - **Validation:** <How the Engineer Agent should verify the fix>
 ```
 
-### **7. ARTIFACT FORMAT (S00X-name.md)**
+### **8. ARTIFACT FORMAT (S00X-name.md)**
 Save in `/docs/security/`:
 
 ```markdown
@@ -80,6 +85,6 @@ Summary of the security posture.
 - [ ] [S00X-02] ...
 ```
 
-### **8. FINALIZATION**
+### **9. FINALIZATION**
 - **Commit Message:** Suggest a commit message (e.g., `docs(security): append audit findings for T00X Task NNN → S00X`).
 - **Output:** Confirm which file was created or updated, how many security items were added, and the link between `T00X` and `S00X`.
