@@ -35,7 +35,7 @@ The **Security Agent** ensures that security is shifted left in the development 
 
 ## Example Call
 
-> "@SecurityAgent, perform a security audit on Task 003 of @T001-reconciliation.md. Update the existing S-file with the findings."
+> "@SecurityAgent, perform a security audit on Task 003 of @T001-reconciliation.md. Create or update the existing S-file with the findings."
 
 ---
 

@@ -17,5 +17,5 @@ The **Quality Agent** acts as the final arbiter of truth. It does not just check
 Even specialized agents can drift. The Quality Agent forces a sanity check before code is merged, ensuring that the project does not accumulate technical debt or unrequested complexity.
 
 ## Example Call
-> "@QualityAgent, review the code for Task [01] of @T001-reconciliation.md comparing with specification @R001-reconciliation.md. Verify if the Entity and Repository patterns are correct."
+> "@QualityAgent, review the code for Task [01] of @T001-reconciliation.md comparing with requirement, tests and security specification. Verify if all implementation are correct."
 

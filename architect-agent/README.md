@@ -15,5 +15,5 @@ Generates files in `/docs/architecture/` following the `T00X-name.md` pattern.
 By breaking complex tasks down into an atomic checklist, the Architect reduces the cognitive load for the Engineer Agent, significantly lowering the risk of hallucinations and over-engineering.
 
 ## Example Call
-> "@ArchitectAgent, analyze the current codebase and define the architecture for specification R001-reconciliation.md."
+> "@ArchitectAgent, analyze the current codebase and define the architecture for specification R001-reconciliation.md"
 

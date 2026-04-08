@@ -19,5 +19,5 @@ The **Engineer Agent** is responsible for the surgical execution of technical ta
 By focusing on one single task at a time, the Engineer Agent ensures maximum quality and prevents "code drift". Any changes made are immediately reflected back in the documentation, keeping the system's "memory" persistent.
 
 ## Example Call
-> "@EngineerAgent, execute Task [01] from file @T001-reconciliation.md, basing yourself on specification @R001-reconciliation.md."
+> "@EngineerAgent, execute Task [01] from file @T001-reconciliation.md, basing yourself on referenced specification"
 

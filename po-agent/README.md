@@ -19,6 +19,6 @@ If you give it a vague command like "Add a login feature", it will respond with 
 Generates files in `/docs/business-requirements/` following the `R00X-name.md` pattern.
 
 ## Example Call
-> "Create a bank reconciliation module for the financial system, referencing the discovery findings in @D001-current-logic.md."
+> "Create a bank reconciliation module for the financial system, referencing the discovery findings in D001-current-logic.md"
 
 

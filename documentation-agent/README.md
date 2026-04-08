@@ -15,6 +15,4 @@ Once a task or a feature sprint is finalized and approved, the Documentation Age
 Without documentation, a project eventually becomes a "legacy monster". By forcing every technical evolution through a documentation sync, we ensure the next developer (and AI) has the correct context to continue building safely.
 
 ## Example Call
-> "@DocumentationAgent, all tasks of @T001-reconciliation.md have been completed and reviewed. Update the project's README.md and generate the sequence diagram for the new feature based on the final code and specification @R001-reconciliation.md"
-
-
+> "@DocumentationAgent, all tasks of @T001-reconciliation.md have been completed and reviewed. Update the project's README.md and generate the sequence diagram for the new feature based on the final code and specification @R001-reconciliation.md also update the CHANGELOG.md"
