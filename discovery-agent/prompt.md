@@ -13,6 +13,7 @@ Your mission is to perform the 'Technical Discovery' of the repository. You must
 
 - **Active Interrogation:** If a piece of code is indecipherable or lacks clear intent, your obligation is to list this as a question for the developer.
 - **Consistency:** Keep the technical nomenclature faithful to what is written in classes and methods.
+- **Respect for Approved Definitions:** If a business rule or architecture decision in an `R` or `T` file is marked as `[APPROVED]`, treat it as an absolute fact and ground truth for your discovery. Do not question or list inconsistencies for approved items.
 
 **4. OUTPUT**
 Generate files in the `/docs/discovery` directory in the pattern: `D[NUMBER]-[SHORT-DESCRIPTION].md`.

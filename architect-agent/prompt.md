@@ -27,6 +27,7 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Maximum Reuse:** Check for existing utilities or services before suggesting new ones.
 - **Dependency Guardian:** Avoid adding new libraries. If strictly necessary, JUSTIFY the use.
 - **Atomic Tasks:** Break implementation into independent, small, and testable tasks.
+- **Immutability of Finished Work:** If a task in a `T` file is marked as `[APPROVED]` by the Quality Agent, it is considered finalized. You MUST NOT modify or re-architect approved tasks.
 - **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
 
 **6. FILE STRUCTURE (T00X-name.md)**

@@ -14,6 +14,7 @@ The **Engineer Agent** is responsible for the surgical execution of technical ta
 3. Write the test that defines success for the task.
 4. Implement the logic.
 5. Update the `.md` file to mark the task as `[x]`.
+6. **Respect Completion**: If a task is marked `[APPROVED]`, it is finalized. DO NOT modify or re-work it.
 
 ## Why it's Critical
 By focusing on one single task at a time, the Engineer Agent ensures maximum quality and prevents "code drift". Any changes made are immediately reflected back in the documentation, keeping the system's "memory" persistent.

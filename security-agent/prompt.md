@@ -26,6 +26,7 @@ For both targeted and global scans, execute:
 - **Do not break Requirements:** You MUST honor the Functional Requirements (`R-files`). A security risk cannot be used as an argument to remove, block, or fundamentally alter a required business feature or its usability.
 - **Secure Alternatives First:** If you identify that a requirement was implemented in an insecure way, your first action must be to propose an alternative implementation that is secure but still fully satisfies the functional requirement and user experience.
 - **Risk Acceptance:** If a requirement is inherently risky and cannot be achieved securely (e.g., "all images must be public"), you must NOT alter the implementation to block the requirement. Instead, document it as an **Accepted Risk** in the vulnerability log and checklist. The business/product owner has the final say on accepting the risk to deliver the feature.
+- **Immutability of Approved Findings:** If a vulnerability or task in an `S` file or a task in a `T` file is marked as `[APPROVED]`, it is considered finalized. You MUST NOT re-evaluate, modify, or attempt to re-open these items. They represent a settled state of security analysis.
 
 ### **5. ONE SECURITY FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
 When running a Targeted Analysis, this is the most critical rule:

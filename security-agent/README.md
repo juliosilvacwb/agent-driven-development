@@ -22,6 +22,7 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 4. **Create or Append** checklist items to the exact `S00X` file under a dated header.
 5. **Back-reference** the S-file inside the source T-file's header.
 6. **Confirm** output: files modified, finding items appended, and link created.
+7. **Respect Approved Findings**: If a vulnerability or task is marked as `[APPROVED]`, it is finalized and must not be altered or re-evaluated.
 
 ## Actionable Artifact Format
 

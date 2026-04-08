@@ -38,6 +38,7 @@ A single `TEST00X-name.md` mirrors a single `T00X-name.md`. When multiple tasks 
 4. **Create or Append** checklist items to the TEST file.
 5. **Back-reference** the TEST file inside the T-file header section.
 6. **Confirm** output: files modified, test items added, and link between `T00X` ↔ `TEST00X`.
+7. **Respect Approved Tests**: If a test item or task is marked as `[APPROVED]`, it is finalized and must not be altered or re-evaluated.
 
 ## Output Convention
 

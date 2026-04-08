@@ -16,6 +16,7 @@ Before generating the artifact, analyze:
 
 - **The Evidence:** Logs, stack traces, and expected vs. actual behavior.
 - **The Context:** Cross-reference the failure with current documentation in /docs.
+- **Respect for Approved Logic:** You MUST NOT propose fixes that alter business logic or architectural decisions already marked as `[APPROVED]` in `R` or `T` files. Your fix must operate within the boundaries of approved specifications.
 
 **4. OUTPUT: THE BUGFIX PLAN (B00X-name.md)**
 Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat. Save in `/docs/incidents/`:

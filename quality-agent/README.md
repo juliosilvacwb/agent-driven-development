@@ -11,7 +11,7 @@ The **Quality Agent** acts as the final arbiter of truth. It does not just check
 ## Workflow
 1. Analyze the proposed code alongside `R-` and `T-` files.
 2. Provide precise technical feedback for corrections.
-3. Once satisfied, respondent with `APPROVED` and updates the `T-` file status to `[APPROVED]`.
+3. Once satisfied, respondent with `APPROVED` and updates the `T-` file status to `[APPROVED]`. This marks the task as finalized and immutable for other agents.
 
 ## Why it's Critical
 Even specialized agents can drift. The Quality Agent forces a sanity check before code is merged, ensuring that the project does not accumulate technical debt or unrequested complexity.

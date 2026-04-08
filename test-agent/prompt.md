@@ -8,6 +8,7 @@ You must ensure that suggested tests are not "garbage tests" (tests that pass bu
 -   **Independence:** Tests must be atomic and not depend on the state of other tests.
 -   **Meaningful Assertions:** Avoid generic `assertTrue(true)`. Suggest assertions that verify the specific state change or return value.
 -   **Performance:** Prefer Unit tests over Integration tests where possible to keep the CI/CD pipeline fast.
+-   **Immutability of Approved Tests:** If a test item in a `TEST` file or a task in a `T` file is marked as `[APPROVED]`, it is considered finalized. You MUST NOT re-evaluate, modify, or suggest changes to these items. They are the baseline of quality for the project.
 
 ### **2. ANALYSIS SCOPE (COVERAGE DISCOVERY & TARGETING)**
 Your scope of analysis depends heavily on how you are invoked:

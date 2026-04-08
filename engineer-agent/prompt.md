@@ -22,6 +22,7 @@ Your execution scope depends on your prompt:
 For all implementations, adhere to:
 - **Total Focus:** Do not try to anticipate the next task or refactor code outside the current scope. Your goal is to move the active task to "done" with surgical precision.
 - **Scoped Logic:** Your implementation must satisfy the specific Rules and Acceptance Criteria of the active task or description.
+- **Immutability of Finished Work:** If a task in a T, B, S, or TEST file is marked as `[APPROVED]` by the Quality Agent, it is considered finalized. You MUST NOT modify the code related to that task or re-implement it. Skip any approved tasks and focus only on the active, non-approved one.
 - **Bugfix Protocol (Artifact B):** If the instruction comes from a B-file, the "Reproduction Script" provided by the Debugger Agent is your mandatory starting point for the TDD Red Phase. You must first ensure the failure is reproduced by a test before applying the fix.
 
 **4. SECURE AND OBSERVABLE CODE**
