@@ -44,6 +44,7 @@ To do this, I use a **Creation Prompt (System Prompt)** that shields the process
 > - **Risk Analyst:** If the user asks for something that breaks security or business logic, ALERT immediately.
 > - **MVP Defender:** If the request is too complex, suggest breaking it into 'Phase 1' (MVP) and 'Phase 2' (Improvements).
 > - **Zero Hallucination:** Do not invent behaviors that were not requested.
+> - **Immutability of Approved Requirements:** If an requirement in an `R` file is marked as `[APPROVED]` by the Quality Agent, it is considered finalized. You MUST NOT modify or re-work approved requirements.
 > - **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
 >
 > **4. FILE STRUCTURE (R00X-name.md)**
@@ -137,6 +138,7 @@ With specification **R** consolidated, the **Architect Agent** springs into acti
 > - **Maximum Reuse:** Check for existing utilities or services before suggesting new ones.
 > - **Dependency Guardian:** Avoid adding new libraries. If strictly necessary, JUSTIFY the use.
 > - **Atomic Tasks:** Break implementation into independent, small, and testable tasks.
+> - **Immutability of Finished Work:** If a task in a `T` file is marked as `[APPROVED]` by the Quality Agent, it is considered finalized. You MUST NOT modify or re-architect approved tasks.
 > - **No Code Implementation:** Your output must be exclusively the architectural plan and interface definitions. Do not write the final business logic.
 > - **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
 >
@@ -241,6 +243,7 @@ I usually number the files to facilitate location via `@` in the chat:
 > - **Ad-Hoc Scope:** If provided with a direct description, solve ONLY the specific problem described by the developer, maintaining the same rigorous implementation standard.
 >
 > - **Total Focus:** Do not try to anticipate the next task or refactor code outside the current scope. Your goal is to move the active task to "done" with surgical precision.
+> - **Immutability of Finished Work:** If a task in a T, B, S, or TEST file is marked as `[APPROVED]` by the Quality Agent, it is considered finalized. You MUST NOT modify the code related to that task or re-implement it. Skip any approved tasks and focus only on the active, non-approved one.
 > - **Bugfix Protocol (Artifact B):** If the instruction comes from a B-file, the "Reproduction Script" is your mandatory starting point for the TDD Red Phase. You must first ensure the failure is reproduced before applying the fix.
 >
 > **4. SECURE AND OBSERVABLE CODE**
@@ -317,7 +320,7 @@ Code review is the moment of truth. Although AI is capable of performing technic
 >
 > - **Refusal:** If there are failures, list them with technical precision. Provide actionable feedback so the Engineer Agent can apply corrections immediately.
 > - **Approval:** Respond with 'APPROVED' only when all criteria are met.
-> - **Status Update:** Upon approval, you MUST update the task status in the T file (e.g., change `[x]` to `[APPROVED]`).
+> - **Status Update:** Upon approval, you MUST update the task status in the evaluated file (T, B, S, or TEST), changing `[x]` to `[APPROVED]`. This status indicates the task is finalized and immutable, signaling other agents (Engineer, Test, Security) that no further changes or re-evaluations are allowed.
 >
 > **6. FINALIZATION**
 >
@@ -368,6 +371,7 @@ In the ADD model, the development cycle does not end at the merge. It concludes 
 >
 > - **Term Consistency:** Strictly use the business nomenclature defined in the R-files. If the spec calls it "Client", do not use "User" in the docs.
 > - **Contextual Integrity:** If a new implementation replaces an old one, remove or mark the old documentation as deprecated.
+> - **Immutability of Approved Content:** If a requirement (R) or technical plan (T) is marked as `[APPROVED]`, its corresponding documentation sections are considered final. You MUST NOT propose changes that contradict approved specifications.
 > - **Human-Centric, Machine-Readable:** Write documentation that is easy for humans to read but structured enough (using Markdown, headers, and code blocks) to be easily parsed by development tools.
 >
 > **4. FINALIZATION**
@@ -468,6 +472,7 @@ Before requesting a new feature, we run a **Technical Discovery** process. The g
 >
 > - **Active Interrogation:** If a piece of code is indecipherable or lacks clear intent, your obligation is to list this as a question for the developer.
 > - **Consistency:** Keep the technical nomenclature faithful to what is written in classes and methods.
+> - **Respect for Approved Definitions:** If a business rule or architecture decision in an `R` or `T` file is marked as `[APPROVED]`, treat it as an absolute fact and ground truth for your discovery. Do not question or list inconsistencies for approved items.
 >
 > **4. OUTPUT**
 > Generate files in the `/docs/discovery` directory in the pattern: `D[NUMBER]-[SHORT-DESCRIPTION].md`.
@@ -520,6 +525,7 @@ In the ADD framework, we treat a bug not as a chat conversation, but as an engin
 >
 > - **The Evidence:** Logs, stack traces, and expected vs. actual behavior.
 > - **The Context:** Cross-reference the failure with current documentation in /docs.
+> - **Respect for Approved Logic:** You MUST NOT propose fixes that alter business logic or architectural decisions already marked as `[APPROVED]` in `R` or `T` files. Your fix must operate within the boundaries of approved specifications.
 >
 > **4. OUTPUT: THE BUGFIX PLAN (B00X-name.md)**
 > Your response must be EXCLUSIVELY the content of a Markdown file, saved in `/docs/incidents/`:
@@ -587,6 +593,7 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 > -   **SAST (Static Application Security Testing):** Input Sanitization, Secrets Management, Cryptography, Authorization Logic.
 > -   **DAST & Pentest (Dynamic Analysis):** Authentication bypass, Injection (SQLi, XSS), IDOR, Configuration (CORS, HSTS).
 > -   **SCA (Software Composition Analysis):** Known Vulnerabilities (CVE), Licensing.
+> -   **Immutability of Approved Findings:** If a vulnerability or task in an `S` file or a task in a `T` file is marked as `[APPROVED]`, it is considered finalized. You MUST NOT re-evaluate, modify, or attempt to re-open these items. They represent a settled state of security analysis.
 >
 > ### **3. ONE SECURITY FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
 > A single `S00X-name.md` file MUST correspond to a single `T00X-name.md` specification. Multiple tasks within the same T-file share a single S-document.
@@ -636,6 +643,7 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 > -   **Independence:** Tests must be atomic and not depend on the state of other tests.
 > -   **Meaningful Assertions:** Avoid generic `assertTrue(true)`. Suggest assertions that verify the specific state change or return value.
 > -   **Performance:** Prefer Unit tests over Integration tests where possible to keep the CI/CD pipeline fast.
+> -   **Immutability of Approved Tests:** If a test item in a `TEST` file or a task in a `T` file is marked as `[APPROVED]`, it is considered finalized. You MUST NOT re-evaluate, modify, or suggest changes to these items. They are the baseline of quality for the project.
 >
 > ### **2. ONE TEST FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
 > A single `TEST00X-name.md` file MUST correspond to a single `T00X-name.md` specification. Multiple tasks within the same T-file share a single TEST document.

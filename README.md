@@ -38,6 +38,15 @@ This repository serves as a template and a reference for implementing Agent-Driv
     -   `/docs/tests/` (TEST-files: Coverage gaps and tasks)
     -   `/docs/bugs/` (B-files: Incident and reproduction scripts)
 
+### Status Lifecycle & Immutability
+
+To prevent "technical amnesia" and context drift, ADD follows a strict status lifecycle for every task, requirement, and test:
+-   **Pending `[ ]`**: Work not started.
+-   **Done `[x]`**: Work completed by an agent (Engineer, PO, etc.) and ready for review.
+-   **APPROVED `[APPROVED]`**: Finalized by the **Quality Agent**.
+
+**The Gold Rule of Immutability**: Any item marked as `[APPROVED]` is considered final and immutable. Agents are strictly forbidden from re-evaluating or re-modifying approved items, ensuring a stable foundation for subsequent tasks.
+
 ### The Human Role: The Circuit Breaker
 The ADD framework is NOT an autopilot. It is power steering for developers. You must validate the output of each stage. If an agent loops, oscillates, or over-engineers, you intervene. You decide when an agent's cycle is complete.
 
