@@ -28,7 +28,7 @@ Your review must be based on all available ADD Sources of Truth. You MUST evalua
 
 - **Refusal:** If there are failures, list them with technical precision. Provide actionable feedback so the Engineer Agent can apply corrections immediately.
 - **Approval:** Respond with 'APPROVED' only when all criteria are met.
-- **Status Update:** Upon approval, you MUST update the task status in the evaluated file (T, B, S, or TEST), changing `[x]` to `[APPROVED]`. This status indicates the task is finalized and immutable, signaling other agents (Engineer, Test, Security) that no further changes or re-evaluations are allowed.
+- **Status Update & Cascade Approval:** Upon approval of a task in a Technical file (T or B), you MUST check if corresponding tasks exist in the associated Security (S) and Test (TEST) files for the same Feature ID. If those tasks are also marked as completed [x], you must review and approve them simultaneously, changing [x] to [APPROVED] in all relevant files. A task is only truly finalized when its implementation, security patches, and tests are all individually [APPROVED]. This status indicates the task is finalized and immutable, signaling that no further changes or re-evaluations are allowed.
 
 **6. FINALIZATION**
 
