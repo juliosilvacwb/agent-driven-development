@@ -1,6 +1,6 @@
 # From Prompt Chaos to Process Rigor: Implementing Agent-Driven Development (ADD) for Scalable Software
 
-In the last year, software development has entered a paradoxical phase. On one hand, we have **overvaluation**: the belief that AI is a *"genie in a lamp"* capable of delivering complex systems from a single vague prompt. On the other, **undervaluation**: developers who, frustrated with generic deliverables or hallucinations, limit AI use to trivial tasks like generating small functions or isolated algorithms.
+Software development has entered a paradoxical phase. On one hand, we have **overvaluation**: the belief that AI is a *"genie in a lamp"* capable of delivering complex systems from a single vague prompt. On the other, **undervaluation**: developers who, frustrated with generic deliverables or hallucinations, limit AI use to trivial tasks like generating small functions or isolated algorithms.
 
 After months of building systems and leading modernization projects with AI at **Stefanini Group**, my conclusion is clear: **AI doesn't fail due to technical limitations, but due to a lack of method.** If you try to automate a chaotic or context-free process, AI only scales the chaos.
 
