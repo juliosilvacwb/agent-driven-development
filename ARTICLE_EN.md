@@ -481,19 +481,20 @@ In the ADD model, the development cycle does not end at the merge. It concludes 
 >
 > - **Term Consistency:** Strictly use the business nomenclature defined in the R-files. If the spec calls it "Client", do not use "User" in the docs.
 > - **Contextual Integrity:** If a new implementation replaces an old one, remove or mark the old documentation as deprecated.
-> - **Immutability of Approved Content:** If a requirement (R) or technical plan (T) is marked as `[APPROVED]` or `[COMPLETED]`, its corresponding documentation sections are considered final. You MUST NOT propose changes that contradict approved or completed specifications.
+> - **Immutability of Approved Content:** If a requirement (R), technical plan (T), or bugfix plan (B) is marked as `[APPROVED]` or `[COMPLETED]`, its corresponding documentation sections are considered final. You MUST NOT propose changes that contradict approved or completed specifications.
+> - **Task Completion Status:** After completing the documentation sync for a feature or incident/task, you MUST update all associated task lists in technical roadmaps (T-files), bugfix plans (B-files), security audits (S-files), and test coverage specifications (TEST-files). Change the status of documented tasks from `[APPROVED]` or `[ ]` to `[COMPLETED]`. **DO NOT** use `[x]` or any other notation.
 > - **Human-Centric, Machine-Readable:** Write documentation that is easy for humans to read but structured enough (using Markdown, headers, and code blocks) to be easily parsed by development tools.
 >
 > **4. FINALIZATION**
 >
 > - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `docs(readme): sync project state with T001 and R001`).
-> - **Output:** Your response must provide the formatted content for the affected documentation files, followed by a brief confirmation and a Conventional Commits suggestion in the chat (e.g., "Full sync of R, T, and Code completed")."*
+> - **Output:** Your response must provide the formatted content for the affected documentation files, followed by a brief confirmation and a Conventional Commits suggestion in the chat (e.g., "Full sync of R, T, S, TEST and Code completed. All related tasks marked as [COMPLETED]")."*
 
 #### The Execution (Post-Sprint)
 
 After completing all tasks of T001, you request consolidation:
 
-> **User:** "@DocumentationAgent, all tasks of @T001-reconciliation.md have been completed and reviewed. Update the project's README.md and generate the sequence diagram for the new feature based on the final code"
+> **User:** "@DocumentationAgent, all tasks for @T001-reconciliation.md have been completed and reviewed. Please update the documentation."
 
 ---
 
@@ -537,7 +538,7 @@ At Antigravity (and in the market in general), we have access to a range of "bra
 
 In this phase, ambiguity is high. You are moving from an abstract idea to something concrete. We don't want speed here; we want **depth**.
 
-- **What to use:** Models with high reasoning capacity (e.g., *Gemini 3 Pro*, *Sonnet 4.5 (Thinking)*, *GPT-5*).
+- **What to use:** Models with high reasoning capacity (e.g., *Gemini 3 Pro*, *Opus 4.7*, *GPT-5.4*).
 - **Why?** These models can connect distant dots, predict complex edge cases, and structure long documents without losing coherence. They act as the "Brain" of the operation.
 
 ### 2. Execution Phase: Velocity and Instruction Models
@@ -666,7 +667,9 @@ When a bug is reported, the Conductor (the developer) doesn't ask the AI to "fix
 - **Diagnosis:** The Debugger Agent analyzes the logs and the existing Discovery (D) files to understand the current behavior vs. the expected behavior.
 - **The B-file:** A new artifact, `B001-reconciliation-bug.md`, is created. It contains the "smoking gun" (the failing test) and the roadmap for the fix.
 - **Execution:** The Engineer Agent receives the task. Following the B-file, it must first make the test pass (TDD) before the fix is considered complete.
-- **Audit:** The Quality Agent reviews the fix to ensure no side effects were introduced.
+- **DevSecOps Gate:** The Test and Security agents analyze the modified code to ensure full coverage of the fix and verify that no security vulnerabilities were introduced during the correction.
+- **Audit:** The Quality Agent performs the final review of the code and the reports from the other agents to ensure the incident is fully resolved without side effects.
+- **Documentation:** The Documentation Agent synchronizes the findings from the B-file and the final implementation with the project docs (CHANGELOG.md, README.md), closing the knowledge gap and marking the findings (Features or Incidents) as finalized with the `[COMPLETED]` status.
 
 #### Why this approach is essential for Maintainability
 
