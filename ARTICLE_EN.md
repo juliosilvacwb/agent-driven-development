@@ -797,3 +797,10 @@ And you? How have you dealt with context (or the lack thereof) in your projects 
 
 > **2nd Edition (Agent-Driven DevSecOps)** 
 > *Updated to encompass DevSecOps, shift-left vulnerability checks, coverage testing integrations, and Ad-Hoc dynamic scoping for the Engineer pipeline.*
+
+---
+
+### Repository and Resources
+
+Explore the framework, prompts, and examples in the official repository:
+👉 **[GitHub: juliosilvacwb/agent-driven-development](https://github.com/juliosilvacwb/agent-driven-development)**
