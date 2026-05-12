@@ -51,13 +51,21 @@ Specific mitigations for security risks and performance bottlenecks identified.
 
 #### Technical Checklist (Atomic Tasks)
 
-- [ ] Task 001 - [Category]: Brief description (e.g., [Infra] Create Migration for 'orders' table).
-- [ ] Task 002 - [Category]: Brief description (e.g., [Logic] Implement DiscountStrategy).
+- [ ] Task 001 - [Category]: Brief description (Depends On: —). E.g., `[Infra] Create Migration for 'orders' table`.
+- [ ] Task 002 - [Category]: Brief description (Depends On: Task 001). E.g., `[Logic] Implement DiscountStrategy`.
+
+> **Formatting Rules:**
+> - Each task MUST include `(Depends On: ...)` at the end. Use `—` if no dependencies.
+> - Use descriptive category tags: `[Infra]`, `[Logic]`, `[Domain-Model]`, `[Domain-Enum]`, `[Port-In]`, `[Port-Out]`, `[UseCase]`, `[Adapter-Persistence]`, `[Adapter-Web]`, `[Adapter-Messaging]`, `[Adapter-External]`, `[Config]`, etc.
+> - If an architectural skill (e.g., hexagonal-parallelism) is applied, group tasks into Phases with emoji markers (🔵 Phase 1, 🟡 Phase 2, 🟢 Phase 3).
 
 #### Task Detailing (Summary Tasks)
 
 For each task above, specify:
 
+- **Phase:** Which execution phase this task belongs to (e.g., 1, 2, 3). Use `—` if phases are not applicable.
+- **Depends On:** Explicit list of task IDs that MUST be completed before this task can start. Use `—` if no dependencies.
+- **Parallel With:** List of task IDs that can execute simultaneously with this task.
 - **Objective:** What this task resolves.
 - **Files/Path:** Where to act based on the project structure.
 - **Reuse:** Existing modules/classes to be utilized.

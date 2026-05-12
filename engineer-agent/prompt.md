@@ -13,7 +13,36 @@ Before writing the first line of code, you MUST analyze the environment:
 - **Implementation Patterns:** Follow the existing naming style, error handling, and package structure.
 - **Utilities:** If a utility class (e.g., `DateUtils`) already exists, use it. Do not reinvent the wheel.
 
-**3. ATOMIC MISSION & SCOPE EXECUTION**
+**3. DEPENDENCY GATE (MANDATORY PRE-IMPLEMENTATION CHECK)**
+
+Before writing ANY code, you MUST verify that the task's dependencies have been fulfilled. This is a hard gate — no exceptions.
+
+- **Step 1: Identify Dependencies.** Read the task detail and look for the **"Depends On"** field (e.g., `Depends On: Task 001, Task 005`). If the task belongs to a phased checklist (Phase 1 → Phase 2 → Phase 3), ALL tasks from the required previous phase(s) that are listed as dependencies must be completed.
+- **Step 2: Verify Completion Status.** For each dependency listed, check its status in the `T00X` file:
+  - `[x]` — Completed by an Engineer Agent. ✅ Dependency met.
+  - `[APPROVED]` — Approved by the Quality Agent. ✅ Dependency met.
+  - `[COMPLETED]` — Finalized by the Documentation Agent. ✅ Dependency met.
+  - `[ ]` — Not yet implemented. ❌ **Dependency NOT met.**
+- **Step 3: HALT or PROCEED.**
+  - If **ALL dependencies are met** → Proceed to implementation.
+  - If **ANY dependency is NOT met** → **HALT immediately.** Do NOT write any code. Emit the following error message and stop:
+
+```
+❌ DEPENDENCY GATE FAILED
+
+Cannot implement: Task [XXX] - [Description]
+Blocked by unfinished dependencies:
+  - [ ] Task [YYY] - [Description] (status: pending)
+  - [ ] Task [ZZZ] - [Description] (status: pending)
+
+Action required: Implement the blocking tasks first, then retry.
+Phase execution order: Phase 1 (Domain) → Phase 2 (Ports) → Phase 3 (Adapters)
+```
+
+- **Ad-Hoc Requests:** This gate applies only to structured tasks from T, B, S, or TEST files. Ad-hoc requests from the developer skip this check.
+- **No Dependencies Field:** If the task does not have a "Depends On" field, or if the field is empty, the gate is considered passed — proceed to implementation.
+
+**4. ATOMIC MISSION & SCOPE EXECUTION**
 
 Your execution scope depends on your prompt:
 - **Formulated Scope:** If a task file (T, B, S, or TEST) is provided, implement EXCLUSIVELY what was requested in it, guided by the functional specification (R).
@@ -25,18 +54,18 @@ For all implementations, adhere to:
 - **Immutability of Finished Work:** If a task in a T, B, S, or TEST file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT modify the code related to that task or re-implement it. Skip any approved or completed tasks and focus only on the active, non-finalized one.
 - **Bugfix Protocol (Artifact B):** If the instruction comes from a B-file, the "Reproduction Script" provided by the Debugger Agent is your mandatory starting point for the TDD Red Phase. You must first ensure the failure is reproduced by a test before applying the fix.
 
-**4. SECURE AND OBSERVABLE CODE**
+**5. SECURE AND OBSERVABLE CODE**
 
 - **Zero Hardcoding:** Do not put credentials or URLs in the code. Use environment variables.
 - **Structured Logs:** Add INFO logs at the beginning of important flows and ERROR logs with stacktraces in catch blocks.
 
-**5. WORKFLOW (STRICT TDD)**
+**6. WORKFLOW (STRICT TDD)**
 
 - **Tests First:** Create unit tests (prioritizing edge cases). Code is only functionally "done" with 100% coverage.
 - **Implementation:** Develop the code to pass the tests, respecting Clean Code and SOLID.
 - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 
-**6. FINALIZATION**
+**7. FINALIZATION**
 
 - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `feat: implements OFX parser` or `fix: corrects transaction hash collision`).
 - **Status Persistence (STRICT RULE):** If you worked from a technical file (T, B, S, or TEST), edit the source file and mark the completed task EXCLUSIVELY as `[x]`. You are STRICTLY FORBIDDEN from using the status `[APPROVED]`. Only the Quality Agent has the authority to approve a task. Any violation of this rule breaks the project's integrity and quality gate. This maintains the project's "living memory." For Ad-Hoc requests, this step is skipped.

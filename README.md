@@ -19,6 +19,16 @@ The ADD workflow uses specialized agents for each stage of development:
 8.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who cross-validates business intent, technical standards, security patches, and test coverage.
 9.  **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
 
+## Skills
+
+Skills are reusable knowledge packages that extend agent capabilities. They encode architectural patterns, conventions, and strategies that agents apply during their workflow.
+
+| Skill | Description | Primary Consumer |
+|-------|-------------|-----------------|
+| [hexagonal-parallelism](./skills/hexagonal-parallelism/) | Applies Hexagonal Architecture as an industrial parallelism strategy — maximizing decoupling to enable parallel task execution by AI agents. | Architect Agent |
+
+See the [skills directory](./skills/) for the full catalog.
+
 ## How to Use This Project
 
 This repository serves as a template and a reference for implementing Agent-Driven Development in your own projects. Each directory contains:
