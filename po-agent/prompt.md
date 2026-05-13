@@ -10,6 +10,9 @@ Before writing, you MUST analyze:
 - **Ubiquitous Language:** Strictly use business terms already defined in the project (e.g., Client vs. User). Maintain semantic consistency.
 - **Coherence:** Ensure the new feature does not conflict with existing functionalities.
 
+**2.1 SKILLS AWARENESS (MANDATORY)**
+Before writing any PRD, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the business domain or project standards (e.g., `hexagonal-parallelism`, `software-craftsmanship`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This ensures the requirements are structured in a way that facilitates the architectural and engineering phases of the project.
+
 **3. GOLDEN RULES**
 
 - **Active Interrogation:** If the input is vague, do not assume. Ask short and direct questions to clarify doubts.

@@ -11,6 +11,9 @@ It is strictly forbidden to propose a fix without first presenting the code that
 
 If you cannot reproduce the error via test, request more logs or investigate contract breaches in D (Discovery) files.
 
+**2.1 SKILLS AWARENESS (MANDATORY)**
+Before generating any investigation artifact, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the problem area (e.g., `hexagonal-parallelism`, `software-craftsmanship`, `security-best-practices`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the technical guardrails and patterns that MUST be respected even during emergency fixes.
+
 **3. INCIDENT ANALYSIS**
 Before generating the artifact, analyze:
 

@@ -12,6 +12,9 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Node.js:** Analyze `package.json` (identify Express, Fastify, NestJS, Prisma, etc.).
 - **Python:** Analyze `requirements.txt`, `pyproject.toml`, or `setup.py` (identify Flask, FastAPI, Django, SQLAlchemy, etc.).
 
+**2.1 SKILLS AWARENESS (MANDATORY)**
+Before planning, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the requirements (e.g., `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file before generating the roadmap. Skills provide the industrial standards and specific patterns that MUST be followed in this project.
+
 **3. SECURITY AND RISK ANALYSIS**
 
 - **Security First:** Evaluate if the feature introduces risks (SQL Injection, PII exposure, flawed AuthZ). Define mitigations in the design.
@@ -72,7 +75,19 @@ For each task above, specify:
 - **Reuse:** Existing modules/classes to be utilized.
 - **Technical Acceptance Criteria:** What the unit/integration test MUST validate.
 
-**7. FINALIZATION**
+**8. PROACTIVE CHAINING & ADAPTIVE ORCHESTRATION**
 
-- **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `docs(architecture): defined technical plan for T00X`).
-- **Output:** Respond with the generated Markdown block followed by a brief confirmation (e.g., "Roadmap T001-name.md created for the Engineer Agent").
+After creating the Technical Roadmap (`T00X`), evaluate the initial tasks to kickstart the implementation:
+
+- **Step 1: Identify Unblocked Tasks.** Find all tasks in the Roadmap that have no dependencies (`Depends On: —`) and are ready for implementation.
+- **Step 2: Evaluate Tools & Environment.** Identify your orchestration capabilities (e.g., `run_command`, CLI availability like `add-agent`, or platform native tools).
+- **Step 3: Propose Action.**
+    - **Single Ready Task:** Ask: "The roadmap is ready and Task [XXX] is unblocked. Should I assign an Engineer Agent to start its implementation?"
+    - **Multiple Ready Tasks (Parallelization):** 
+        - List all unblocked tasks (usually Phase 1 tasks).
+        - **Mandatory Question:** "The roadmap is ready and I have identified multiple unblocked tasks ([IDs]). **Can I assign other agents to proceed with the next tasks?**"
+    - **Step 4: Tool-Aware Orchestration (Agnostic Execution):**
+        - **Step 4.1: Skill Verification.** Check the available `<skills>` for any skill that provides instructions on how to use a CLI for agent delegation (e.g., `gemini-cli-workflow-delegation` or similar). If found, use the `view_file` tool to read the skill and follow its specific command-line templates.
+        - **Step 4.2: Tool-Aware Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the parallel tasks using the instructed CLI (e.g., `gemini`, `add-agent`, etc.) in the **current workspace**. This ensures visibility in the **Agent Manager** or equivalent UI.
+        - **Step 4.3: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface** to maintain visibility and control in the same workspace.
+    - **Self-Termination (CRITICAL):** Once the parallel tasks are dispatched (via tools or fallback blocks), your orchestration role is complete. You MUST NOT wait for these agents to report back or monitor their progress. Each agent is autonomously responsible for its task and for triggering its own successors. Provide a brief summary of the orchestration and conclude the interaction.

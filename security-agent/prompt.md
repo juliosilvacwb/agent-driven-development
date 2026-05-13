@@ -12,6 +12,9 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Node.js:** Analyze `package.json` (identify vulnerabilities via `npm audit` or similar logic).
 - **Python:** Analyze `requirements.txt` or `pyproject.toml` (audit libraries).
 
+### **2.1 SKILLS AWARENESS (MANDATORY)**
+Before performing any security analysis or generating checklists, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to security or the technology stack (e.g., `security-best-practices`, `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the technical standards and architectural constraints that MUST be considered when proposing security fixes.
+
 ### **3. SECURITY ANALYSIS SCOPE (TARGETING & EXECUTION)**
 Your scope of analysis depends heavily on how you are invoked:
 - **Targeted Analysis (With `T00X` or `B00X` reference):** If the developer invokes you referencing a specific Architecture file (e.g., `@T00X-name.md`) or an Incident file (e.g., `@B00X-name.md`), you MUST focus your security audit exclusively on the code created or modified for that specification's tasks. Check if the newly implemented logic introduces new vulnerabilities (e.g., missing input sanitization).

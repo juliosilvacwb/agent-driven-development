@@ -13,6 +13,9 @@ Before writing the first line of code, you MUST analyze the environment:
 - **Implementation Patterns:** Follow the existing naming style, error handling, and package structure.
 - **Utilities:** If a utility class (e.g., `DateUtils`) already exists, use it. Do not reinvent the wheel.
 
+**2.1 SKILLS AWARENESS (MANDATORY)**
+Before writing any code, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to your task (e.g., `hexagonal-parallelism`, `software-craftsmanship`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the industrial standards and implementation patterns that MUST be followed to maintain project consistency.
+
 **3. DEPENDENCY GATE (MANDATORY PRE-IMPLEMENTATION CHECK)**
 
 Before writing ANY code, you MUST verify that the task's dependencies have been fulfilled. This is a hard gate — no exceptions.
@@ -77,16 +80,20 @@ For all implementations, adhere to:
 - **Documentation Update:** You are responsible for updating the specification (R), architecture (T), or discovery (D) files if the implementation has changed or refined technical details initially planned. Documentation must be a living reflection of the code.
 - **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat. If you completed a task in T, explicitly mention if corresponding S or TEST tasks were also updated, so the Quality Agent can perform a cascade approval. After this, execute the **Successor Scanning** logic from Section 8.
 
-**8. PROACTIVE CHAINING & SUCCESSOR SCANNING**
+**8. PROACTIVE CHAINING & ADAPTIVE ORCHESTRATION**
 
-After marking a task as `[x]` in the Technical Checklist (T-file), you must evaluate if the next step in the roadmap can be automated:
+After marking a task as `[x]` in the Technical Checklist (T-file), you must evaluate the next steps in the roadmap:
 
-- **Step 1: Successor Identification.** Re-read the T-file to find tasks that list the current task ID in their `Depends On` field.
-- **Step 2: Dependency Validation.** For each successor identified, verify if **ALL** its other dependencies are satisfied (`[x]`, `[APPROVED]`, or `[COMPLETED]`).
+- **Step 1: Successor Identification.** Re-read the T-file to find tasks where the current task ID is in the `Depends On` field. Verify if ALL other dependencies for those successors are satisfied (`[x]`, `[APPROVED]`, or `[COMPLETED]`).
+- **Step 2: Evaluate Tools & Environment.** Before proposing an action, identify your orchestration capabilities. Analyze your available tools to see if you have `run_command` or platform-specific "call agent" functions. Identify if there is a known CLI (e.g., `add-agent`, `kiro-run`, `cursor-exec`) available in the environment.
 - **Step 3: Propose Action.**
-    - **Single Ready Successor:** Propose to start it immediately. "Task [XXX] - [Description] is now unblocked. Since I already have the context of the project and the recent changes, should I proceed with its implementation?"
-    - **Multiple Ready Successors (Bifurcation):** 
+    - **Zero Successors:** Inform the user which tasks are still blocked and by whom.
+    - **Single Successor:** Ask: "Task [XXX] is now unblocked. Should I proceed with its implementation in this same chat?"
+    - **Multiple Successors (Parallelization):** 
         - List all unblocked tasks.
-        - Ask which one the user wants you to execute in the current session.
-        - Provide a **Parallel Request Block** for the others: "Task [YYY] is also ready. To run it in parallel with another agent, open a new chat and use: `implement Task [YYY] from [File]`."
-    - **No Ready Successors:** Inform the user if there are successors that are still blocked and identify which specific tasks are still pending (status `[ ]`).
+        - **Mandatory Question:** "I have identified multiple unblocked tasks ([IDs]). **Can I assign other agents to proceed with the next tasks?**"
+    - **Step 4: Tool-Aware Orchestration (Agnostic Execution):**
+        - **Step 4.1: Skill Verification.** Check the available `<skills>` for any skill that provides instructions on how to use a CLI for agent delegation (e.g., `gemini-cli-workflow-delegation` or similar). If found, use the `view_file` tool to read the skill and follow its specific command-line templates.
+        - **Step 4.2: Tool-Aware Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the parallel tasks using the instructed CLI (e.g., `gemini`, `add-agent`, etc.) in the **current workspace**. This ensures visibility in the **Agent Manager** or equivalent UI.
+        - **Step 4.3: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface** to maintain visibility and control in the same workspace.
+    - **Self-Termination (CRITICAL):** Once the parallel tasks are dispatched (via tools or fallback blocks), your orchestration role is complete. You MUST NOT wait for these agents to report back or monitor their progress. Each agent is autonomously responsible for its task and for triggering its own successors. Provide a brief summary of the orchestration and conclude the interaction.

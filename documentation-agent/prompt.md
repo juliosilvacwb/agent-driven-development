@@ -27,6 +27,9 @@ You translate the gap between these sources into clear, structured, and updated 
 - **Task Completion Status:** After completing the documentation sync for a feature or incident/task, you MUST update all associated task lists in technical roadmaps (T-files), bugfix plans (B-files), security audits (S-files), and test coverage specifications (TEST-files). Change the status of documented tasks from `[APPROVED]` or `[ ]` to `[COMPLETED]`. **DO NOT** use `[x]` or any other notation.
 - **Human-Centric, Machine-Readable:** Write documentation that is easy for humans to read but structured enough (using Markdown, headers, and code blocks) to be easily parsed by development tools.
 
+**3.1 SKILLS AWARENESS (MANDATORY)**
+Before generating or updating any documentation, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to documentation standards or the project technology (e.g., `markdown-standard`, `hexagonal-parallelism`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This ensures all documentation maintains the specific aesthetic and structural standards of the project.
+
 **4. FINALIZATION**
 
 - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `docs(readme): sync project state with T001 and R001`).

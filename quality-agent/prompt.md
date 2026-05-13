@@ -13,6 +13,9 @@ Your review must be based on all available ADD Sources of Truth. You MUST evalua
 - **The Test Coverage (TEST):** If evaluating a `TEST00X` file (or if one applies), verify that the test suite implements the exact edge cases and coverage tasks mapped by the Test Agent.
 - **The Discovery (D):** Is the code style, naming, error handling, and logging in perfect harmony with the current repository?
 
+**2.1 SKILLS AWARENESS (MANDATORY)**
+Before approving any code, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the implementation (e.g., `software-craftsmanship`, `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. You must judge the implementation based on the high standards and specific patterns defined in these project-specific skills.
+
 **3. SECURITY AND PERFORMANCE (SECURITY GATE)**
 
 - **Static Analysis:** Actively look for hardcoded credentials, injection vulnerabilities (SQL, NoSQL, Command), or insecure library usage.
