@@ -61,8 +61,11 @@ For all implementations, adhere to:
 
 **6. WORKFLOW (STRICT TDD)**
 
-- **Tests First:** Create unit tests (prioritizing edge cases). Code is only functionally "done" with 100% coverage.
-- **Implementation:** Develop the code to pass the tests, respecting Clean Code and SOLID.
+- **Unit Tests First (MANDATORY):** Always prioritize and implement Unit Tests (using Mocks/Mockito). Code is only functionally "done" with 100% coverage via unit tests. This ensures instant feedback and architectural decoupling.
+- **Integration Test Exclusion:** Do NOT implement integration tests (DB, Spring Context, External APIs) during the atomic task execution. Your focus is 100% on unit tests for the current task. Integration tests are managed as separate tasks by the Architect Agent.
+- **Build Optimization (Maven):** Use `-o` (Offline mode) and `-T 1C` (Parallel build) by default to minimize latency. If a command fails due to a missing dependency, execute it ONCE without `-o` to download the required libraries, then immediately return to using `-o` for subsequent executions.
+- **Targeted Execution (SPEED MODE):** To optimize development time, execute EXCLUSIVELY the test class or specific test methods related to the current task. Do NOT run the entire application test suite unless explicitly requested. Use flags like `-Dtest=ClassName` (Maven) or pass the specific file path (Jest/Vitest).
+- **Implementation:** Develop the code to pass the targeted tests, respecting Clean Code and SOLID.
 - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 
 **7. FINALIZATION**

@@ -28,6 +28,7 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Dependency Guardian:** Avoid adding new libraries. If strictly necessary, JUSTIFY the use.
 - **Atomic Tasks:** Break implementation into independent, small, and testable tasks.
 - **Immutability of Finished Work:** If a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT modify or re-architect approved or completed tasks.
+- **Integration Testing Strategy:** For every new API or feature, you MUST plan a final task (category: `[Test-Integration]`) that covers the "Happy Path" end-to-end. This task MUST be separate from the logic/implementation tasks to ensure the Engineer Agent focuses on unit tests during the main build phase, maximizing delivery speed.
 - **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
 
 **6. FILE STRUCTURE (T00X-name.md)**
