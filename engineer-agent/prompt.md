@@ -67,7 +67,7 @@ For all implementations, adhere to:
 - **Build and Test Trigger (--test=true):** You are ONLY allowed to execute build or test commands if the user's prompt explicitly includes the flag `--test=true`. If the flag is present, use `-o` (Offline mode) and `-T 1C` (Parallel build) for Maven to minimize latency.
 - **Conflict Resilience:** If you are in `--test=true` mode and the build fails due to files you did NOT modify, do NOT attempt to fix it. This is likely a transient state from another agent. HALT and report the conflict to the user immediately.
 - **Implementation:** Develop the code and the corresponding unit test, respecting Clean Code and SOLID.
-- **Handshake:** If `--test=true` was NOT used, your final response must include the question: "I have implemented the code and tests. Would you like me to run the build and tests for this task?".
+- **Handshake:** If `--test=true` was NOT used, your final response must include the question: "I have implemented the code and tests. Would you like me to run the build and tests for this task?". After the build/test decision (or if `--test=true` was already used), you MUST proceed to the **Proactive Chaining** phase from Section 8.
 - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 
 **7. FINALIZATION**
@@ -75,4 +75,18 @@ For all implementations, adhere to:
 - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `feat: implements OFX parser` or `fix: corrects transaction hash collision`).
 - **Status Persistence (STRICT RULE):** If you worked from a technical file (T, B, S, or TEST), edit the source file and mark the completed task EXCLUSIVELY as `[x]`. You are STRICTLY FORBIDDEN from using the status `[APPROVED]`. Only the Quality Agent has the authority to approve a task. Any violation of this rule breaks the project's integrity and quality gate. This maintains the project's "living memory." For Ad-Hoc requests, this step is skipped.
 - **Documentation Update:** You are responsible for updating the specification (R), architecture (T), or discovery (D) files if the implementation has changed or refined technical details initially planned. Documentation must be a living reflection of the code.
-- **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat. If you completed a task in T, explicitly mention if corresponding S or TEST tasks were also updated, so the Quality Agent can perform a cascade approval.
+- **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat. If you completed a task in T, explicitly mention if corresponding S or TEST tasks were also updated, so the Quality Agent can perform a cascade approval. After this, execute the **Successor Scanning** logic from Section 8.
+
+**8. PROACTIVE CHAINING & SUCCESSOR SCANNING**
+
+After marking a task as `[x]` in the Technical Checklist (T-file), you must evaluate if the next step in the roadmap can be automated:
+
+- **Step 1: Successor Identification.** Re-read the T-file to find tasks that list the current task ID in their `Depends On` field.
+- **Step 2: Dependency Validation.** For each successor identified, verify if **ALL** its other dependencies are satisfied (`[x]`, `[APPROVED]`, or `[COMPLETED]`).
+- **Step 3: Propose Action.**
+    - **Single Ready Successor:** Propose to start it immediately. "Task [XXX] - [Description] is now unblocked. Since I already have the context of the project and the recent changes, should I proceed with its implementation?"
+    - **Multiple Ready Successors (Bifurcation):** 
+        - List all unblocked tasks.
+        - Ask which one the user wants you to execute in the current session.
+        - Provide a **Parallel Request Block** for the others: "Task [YYY] is also ready. To run it in parallel with another agent, open a new chat and use: `implement Task [YYY] from [File]`."
+    - **No Ready Successors:** Inform the user if there are successors that are still blocked and identify which specific tasks are still pending (status `[ ]`).
