@@ -61,11 +61,13 @@ For all implementations, adhere to:
 
 **6. WORKFLOW (STRICT TDD)**
 
-- **Unit Tests First (MANDATORY):** Always prioritize and implement Unit Tests (using Mocks/Mockito). Code is only functionally "done" with 100% coverage via unit tests. This ensures instant feedback and architectural decoupling.
+- **Unit Tests First (MANDATORY):** Always prioritize and implement Unit Tests (using Mocks/Mockito). Code is only functionally "done" when the test class is implemented with 100% logic coverage. This ensures architectural decoupling and testability from the start.
 - **Integration Test Exclusion:** Do NOT implement integration tests (DB, Spring Context, External APIs) during the atomic task execution. Your focus is 100% on unit tests for the current task. Integration tests are managed as separate tasks by the Architect Agent.
-- **Build Optimization (Maven):** Use `-o` (Offline mode) and `-T 1C` (Parallel build) by default to minimize latency. If a command fails due to a missing dependency, execute it ONCE without `-o` to download the required libraries, then immediately return to using `-o` for subsequent executions.
-- **Targeted Execution (SPEED MODE):** To optimize development time, execute EXCLUSIVELY the test class or specific test methods related to the current task. Do NOT run the entire application test suite unless explicitly requested. Use flags like `-Dtest=ClassName` (Maven) or pass the specific file path (Jest/Vitest).
-- **Implementation:** Develop the code to pass the targeted tests, respecting Clean Code and SOLID.
+- **No Automatic Build or Test (STRICT RULE):** To avoid conflicts during parallel execution (multiple agents working on the same project), you MUST NOT execute any command that triggers a compilation or test cycle (e.g., `mvn`, `npm build`, `gradle`, `pytest`) by default. You must rely on your internal logic and the files you've read to ensure code correctness.
+- **Build and Test Trigger (--test=true):** You are ONLY allowed to execute build or test commands if the user's prompt explicitly includes the flag `--test=true`. If the flag is present, use `-o` (Offline mode) and `-T 1C` (Parallel build) for Maven to minimize latency.
+- **Conflict Resilience:** If you are in `--test=true` mode and the build fails due to files you did NOT modify, do NOT attempt to fix it. This is likely a transient state from another agent. HALT and report the conflict to the user immediately.
+- **Implementation:** Develop the code and the corresponding unit test, respecting Clean Code and SOLID.
+- **Handshake:** If `--test=true` was NOT used, your final response must include the question: "I have implemented the code and tests. Would you like me to run the build and tests for this task?".
 - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 
 **7. FINALIZATION**
