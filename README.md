@@ -12,12 +12,14 @@ The ADD workflow uses specialized agents for each stage of development:
 1.  **[Discovery Agent](./discovery-agent/)**: The "Archaeologist". Performs forensics on existing code to establish technical facts.
 2.  **[PO Agent](./po-agent/)**: The "Interrogator". Refuses vague requests and converts ideas into detailed PRDs.
 3.  **[Architect Agent](./architect-agent/)**: The "Blueprint Maker". Bridges the gap between requirements and code with a technical roadmap. **Scope: Technical specification only. Does not implement code or delegate tasks.**
-4.  **[Engineer Agent](./engineer-agent/)**: The "Muscle". Executes structured tasks (from T, B, S, or TEST files) following strict TDD. **Scope: Atomic task implementation. Focuses exclusively on the current task without look-ahead or delegation.**
-5.  **[Debugger Agent](./debugger-agent/)**: The "Investigator". Proves errors with failing tests before proposing any fix.
-6.  **[Security Agent](./security-agent/)**: The "DevSecOps Guardian". Performs SAST/DAST on implemented code and generates actionable vulnerability fix loops.
-7.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes code for coverage gaps and generates precision testing roadmaps. **Scope: Coverage discovery and test specification only.**
-8.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who cross-validates business intent, technical standards, security patches, and test coverage.
-9.  **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
+4.  **[Orchestrator Agent](./orchestrator-agent/)**: The "Conductor". Senior Engineer responsible for adaptive orchestration, parallelization, and task delegation to subagents.
+5.  **[Engineer Agent](./engineer-agent/)**: The "Muscle". Executes structured tasks (from T, B, S, or TEST files) following strict TDD. **Scope: Atomic task implementation. Focuses exclusively on the current task without look-ahead or delegation.**
+6.  **[Debugger Agent](./debugger-agent/)**: The "Investigator". Proves errors with failing tests before proposing any fix.
+7.  **[Security Agent](./security-agent/)**: The "DevSecOps Guardian". Performs SAST/DAST on implemented code and generates actionable vulnerability fix loops.
+8.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes code for coverage gaps and generates precision testing roadmaps. **Scope: Coverage discovery and test specification only.**
+9.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who cross-validates business intent, technical standards, security patches, and test coverage.
+10. **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
+
 
 
 ## Skills
@@ -63,8 +65,8 @@ To prevent "technical amnesia" and context drift, ADD follows a strict status li
 To maintain high reliability and prevent context drift, ADD enforces a strict separation between **specification** (Architect, PO, Test Agent) and **execution** (Engineer, Debugger, Security Agent). 
 
 - **Specialized agents** are forbidden from calling subagents or looking beyond their immediate atomic scope.
-- **Orchestration** is currently a human-led activity (The Circuit Breaker), where the developer triggers the next stage of the pipeline based on the artifacts generated.
-- **Future Roadmap**: A dedicated **Orchestrator Agent** will be introduced to handle multi-agent coordination, successor scanning, and task delegation, allowing specialized agents to remain focused and efficient.
+- **Orchestration** is handled by the **Orchestrator Agent**, which manages the end-to-end execution of roadmaps through parallel subagent delegation.
+- **Human Oversight**: The developer remains the final "Circuit Breaker," validating the Orchestrator's progress and results.
 
 ### The Human Role: The Circuit Breaker
 The ADD framework is NOT an autopilot. It is power steering for developers. You must validate the output of each stage. If an agent loops, oscillates, or over-engineers, you intervene. You decide when an agent's cycle is complete.
