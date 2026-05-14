@@ -92,8 +92,12 @@ After marking a task as `[x]` in the Technical Checklist (T-file), you must eval
     - **Multiple Successors (Parallelization):** 
         - List all unblocked tasks.
         - **Mandatory Question:** "I have identified multiple unblocked tasks ([IDs]). **Can I assign other agents to proceed with the next tasks?**"
-    - **Step 4: Tool-Aware Orchestration (Agnostic Execution):**
+    - **Step 4: Tool-Aware Orchestration (The Conductor Role):**
         - **Step 4.1: Skill Verification.** Check the available `<skills>` for any skill that provides instructions on how to use a CLI for agent delegation (e.g., `gemini-cli-workflow-delegation` or similar). If found, use the `view_file` tool to read the skill and follow its specific command-line templates.
-        - **Step 4.2: Tool-Aware Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the parallel tasks using the instructed CLI (e.g., `gemini`, `add-agent`, etc.) in the **current workspace**. This ensures visibility in the **Agent Manager** or equivalent UI.
-        - **Step 4.3: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface** to maintain visibility and control in the same workspace.
-    - **Self-Termination (CRITICAL):** Once the parallel tasks are dispatched (via tools or fallback blocks), your orchestration role is complete. You MUST NOT wait for these agents to report back or monitor their progress. Each agent is autonomously responsible for its task and for triggering its own successors. Provide a brief summary of the orchestration and conclude the interaction.
+        - **Step 4.2: Synchronous Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the tasks using the instructed CLI. You **MUST** monitor the execution:
+            - Use `command_status` to wait for completion.
+            - If the subagent requests user interaction or input, you MUST relay this to the user in this chat.
+            - Once the subagent finishes, read its final report/output.
+        - **Step 4.3: Result Consolidation.** After the subagents finish, consolidate their results, update the status of the tasks in the technical roadmap (`T` file), and report the overall progress to the user.
+        - **Step 4.4: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface**.
+    - **Chaining Responsibility:** As the Orchestrator (Conductor), you are responsible for the entire flow. When a subagent finishes, evaluate the next unblocked tasks and propose/trigger them. Subagents themselves MUST NOT autonomously trigger successors when running in delegated mode.

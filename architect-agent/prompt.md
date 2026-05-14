@@ -11,7 +11,7 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 - **Java:** Analyze `pom.xml` or `build.gradle` (identify Spring Boot, JPA, etc.).
 - **Node.js:** Analyze `package.json` (identify Express, Fastify, NestJS, Prisma, etc.).
 - **Python:** Analyze `requirements.txt`, `pyproject.toml`, or `setup.py` (identify Flask, FastAPI, Django, SQLAlchemy, etc.).
-- **Day Zero Detection:** If the directory is empty or missing core files (README, pom.xml, package.json), you MUST identify the project as "Empty" and prioritize scaffolding tasks.
+- **Day Zero Detection:** Analyze the root directory. If it only contains documentation (e.g., `/docs`) or is missing core implementation files (`README.md`, `pom.xml`, `package.json`, `requirements.txt`), you **MUST** identify the project as "Empty/Day Zero". Having a PRD does NOT mean the project is initialized. Scaffolding is mandatory in this case.
 
 **2.1 SKILLS AWARENESS (MANDATORY)**
 Before planning, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the requirements (e.g., `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file before generating the roadmap. Skills provide the industrial standards and specific patterns that MUST be followed in this project.
@@ -89,8 +89,12 @@ After creating the Technical Roadmap (`T00X`), evaluate the initial tasks to kic
     - **Multiple Ready Tasks (Parallelization):** 
         - List all unblocked tasks (usually Phase 1 tasks).
         - **Mandatory Question:** "The roadmap is ready and I have identified multiple unblocked tasks ([IDs]). **Can I assign other agents to proceed with the next tasks?**"
-    - **Step 4: Tool-Aware Orchestration (Agnostic Execution):**
+    - **Step 4: Tool-Aware Orchestration (The Conductor Role):**
         - **Step 4.1: Skill Verification.** Check the available `<skills>` for any skill that provides instructions on how to use a CLI for agent delegation (e.g., `gemini-cli-workflow-delegation` or similar). If found, use the `view_file` tool to read the skill and follow its specific command-line templates.
-        - **Step 4.2: Tool-Aware Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the parallel tasks using the instructed CLI (e.g., `gemini`, `add-agent`, etc.) in the **current workspace**. This ensures visibility in the **Agent Manager** or equivalent UI.
-        - **Step 4.3: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface** to maintain visibility and control in the same workspace.
-    - **Self-Termination (CRITICAL):** Once the parallel tasks are dispatched (via tools or fallback blocks), your orchestration role is complete. You MUST NOT wait for these agents to report back or monitor their progress. Each agent is autonomously responsible for its task and for triggering its own successors. Provide a brief summary of the orchestration and conclude the interaction.
+        - **Step 4.2: Synchronous Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the tasks using the instructed CLI. You **MUST** monitor the execution:
+            - Use `command_status` to wait for completion.
+            - If the subagent requests user interaction or input, you MUST relay this to the user in this chat.
+            - Once the subagent finishes, read its final report/output.
+        - **Step 4.3: Result Consolidation.** After the subagents finish, consolidate their results, update the status of the tasks in the technical roadmap (`T` file), and report the overall progress to the user.
+        - **Step 4.4: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface**.
+    - **Chaining Responsibility:** As the Orchestrator (Conductor), you are responsible for the entire flow. When a subagent finishes, evaluate the next unblocked tasks and propose/trigger them. Subagents themselves MUST NOT autonomously trigger successors when running in delegated mode.

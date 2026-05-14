@@ -19,19 +19,23 @@ This skill allows the agent to orchestrate complex tasks by triggering global wo
 The agent must identify the correct workflow name from the global registry (e.g., `/engineer-agent`, `/architect-agent`). These are invoked directly as slash commands within the prompt string.
 
 ### 2. Execution Template
-Use the `run_command` tool to execute the `gemini` binary. 
+Use the `run_command` tool to execute the `gemini` binary.
 
-#### A. Non-Interactive (Standard Delegation)
-Use the `-p` flag for tasks where the agent should execute a specific mission and finish.
+#### A. Interactive (Recommended for Orchestration)
+Use the `-i` flag to ensure the session is interactive. This allows the parent agent to relay inputs if the subagent requests them.
 ```powershell
-gemini -p "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity"
+gemini -i "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity"
 ```
+
+#### B. Non-Interactive (Fire-and-Forget)
+Use the `-p` flag ONLY for background tasks where NO interaction or monitoring is required. **Avoid this for core ADD cycles.**
 
 ### 3. Orchestration & Centralization (The Conductor Role)
 O agente que invoca esta skill (o agente atual no chat) atua como o **ponto centralizador** da operação.
-- **Relay de Interação**: Qualquer dúvida, necessidade de input humano ou decisão de gate gerada pelo subagente será repassada por este chat principal.
-- **Visibilidade**: Embora os subagentes rodem em processos separados, o agente atual é responsável por reportar o progresso geral e consolidar os resultados no contexto da conversa atual.
-- **Sincronização**: O Agent Manager agrupa as sessões automaticamente através da árvore de processos, mantendo a hierarquia de execução visível para o usuário.
+- **Sincronização Obrigatória**: Você **DEVE** monitorar o status do comando usando `command_status`.
+- **Relay de Interação**: Se a saída do comando indicar que o subagente está esperando por input ou decisão do usuário, repasse a pergunta neste chat e use `send_command_input` para enviar a resposta ao subagente.
+- **Captura de Saída**: Uma vez que o subagente finalize, você deve ler o relatório final e usá-lo para atualizar o estado do projeto (roadmap T-file, etc.) e informar o usuário.
+- **Visibilidade**: O Agent Manager agrupa as sessões automaticamente através da árvore de processos.
 
 > [!IMPORTANT]
 > Apenas use o comando `gemini`. Não utilize o subcomando `run`. O nome do workflow (iniciando com `/`) deve ser o primeiro termo dentro das aspas do prompt.
