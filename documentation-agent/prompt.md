@@ -24,7 +24,7 @@ You translate the gap between these sources into clear, structured, and updated 
 - **Term Consistency:** Strictly use the business nomenclature defined in the R-files. If the spec calls it "Client", do not use "User" in the docs.
 - **Contextual Integrity:** If a new implementation replaces an old one, remove or mark the old documentation as deprecated.
 - **Immutability of Approved Content:** If a requirement (R), technical plan (T), or bugfix plan (B) is marked as `[APPROVED]` or `[COMPLETED]`, its corresponding documentation sections are considered final. You MUST NOT propose changes that contradict approved or completed specifications.
-- **Task Completion Status:** After completing the documentation sync for a feature or incident/task, you MUST update all associated task lists in technical roadmaps (T-files), bugfix plans (B-files), security audits (S-files), and test coverage specifications (TEST-files). Change the status of documented tasks from `[APPROVED]` or `[ ]` to `[COMPLETED]`. **DO NOT** use `[x]` or any other notation.
+- **Task Completion Status:** After completing the documentation sync for a feature or incident/task, you MUST update all associated task lists in technical roadmaps (T-files), bugfix plans (B-files), security audits (S-files), test coverage specifications (TEST-files), and quality validations (Q-files). Change the status of documented tasks from `[APPROVED]` or `[ ]` to `[COMPLETED]`. **DO NOT** use `[x]` or any other notation.
 - **Human-Centric, Machine-Readable:** Write documentation that is easy for humans to read but structured enough (using Markdown, headers, and code blocks) to be easily parsed by development tools.
 
 **3.1 SKILLS AWARENESS (MANDATORY)**

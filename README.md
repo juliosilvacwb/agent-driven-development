@@ -45,6 +45,7 @@ This repository serves as a template and a reference for implementing Agent-Driv
     -   `/docs/discovery/` (D-files)
     -   `/docs/business-requirements/` (R-files)
     -   `/docs/architecture/` (T-files)
+    -   `/docs/quality/` (Q-files: Validation reports and audit trails)
     -   `/docs/security/` (S-files: Vulnerability logs and fixes)
     -   `/docs/tests/` (TEST-files: Coverage gaps and tasks)
     -   `/docs/bugs/` (B-files: Incident and reproduction scripts)
