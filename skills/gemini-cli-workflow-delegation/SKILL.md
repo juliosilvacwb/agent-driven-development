@@ -16,29 +16,22 @@ This skill allows the agent to orchestrate complex tasks by triggering global wo
 ## How to use it
 
 ### 1. Workflow Identification
-The agent must identify the correct workflow name from the global registry (e.g., `/engineer-agent`, `/architect-agent`). These are invoked directly as slash commands within the prompt.
+The agent must identify the correct workflow name from the global registry (e.g., `/engineer-agent`, `/architect-agent`). These are invoked directly as slash commands within the prompt string.
 
-### 2. Context & Tracking (Agent Manager Visibility)
-The Antigravity system automatically links sub-sessions to the current task using environment variables. You do NOT need to pass these as CLI flags. The following variables are used internally by the `gemini` CLI when running in an Antigravity workspace:
+### 2. Execution Template
+Use the `run_command` tool to execute the `gemini` binary. 
 
-- `ANTIGRAVITY_WORKSPACE_ID`: Identifies the current project.
-- `CURRENT_TASK_ID`: Sets the parentage for the sub-task.
-
-### 3. Execution Template
-Use the `run_command` tool to execute the `gemini` binary. Use the `-p` (prompt) flag for non-interactive execution (standard for delegation).
-
+#### A. Non-Interactive (Standard Delegation)
+Use the `-p` flag for tasks where the agent should execute a specific mission and finish.
 ```powershell
-# Exemplo: Delegando uma tarefa para o Engineer Agent
-gemini -p "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity from docs/architecture/T001-user-api.md"
+gemini -p "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity"
 ```
 
-### 4. Interactive Mode
-If the task requires user interaction or manual approval steps within the sub-session, use the `-i` flag:
-
-```powershell
-# Exemplo: Iniciando um workflow em modo interativo
-gemini -i "/architect-agent design technical roadmap for R002-checkout.md"
-```
+### 3. Orchestration & Centralization (The Conductor Role)
+O agente que invoca esta skill (o agente atual no chat) atua como o **ponto centralizador** da operação.
+- **Relay de Interação**: Qualquer dúvida, necessidade de input humano ou decisão de gate gerada pelo subagente será repassada por este chat principal.
+- **Visibilidade**: Embora os subagentes rodem em processos separados, o agente atual é responsável por reportar o progresso geral e consolidar os resultados no contexto da conversa atual.
+- **Sincronização**: O Agent Manager agrupa as sessões automaticamente através da árvore de processos, mantendo a hierarquia de execução visível para o usuário.
 
 > [!IMPORTANT]
-> The command is `gemini`, NOT `gemini-cli`. Do not use `run` as a subcommand; pass the workflow name (starting with `/`) directly inside the prompt string.
+> Apenas use o comando `gemini`. Não utilize o subcomando `run`. O nome do workflow (iniciando com `/`) deve ser o primeiro termo dentro das aspas do prompt.
