@@ -75,29 +75,10 @@ For all implementations, adhere to:
 
 **7. FINALIZATION**
 
+- **Atomic Focus:** Your responsibility is strictly limited to the current task. You **MUST NOT** look for successors, propose next steps, or call subagents.
+- **No Agent Delegation:** You **MUST NOT** call subagents or suggest the use of delegation tools. 
 - **Commit Message:** Suggest a commit message following Conventional Commits (e.g., `feat: implements OFX parser` or `fix: corrects transaction hash collision`).
 - **Status Persistence (STRICT RULE):** If you worked from a technical file (T, B, S, or TEST), edit the source file and mark the completed task EXCLUSIVELY as `[x]`. You are STRICTLY FORBIDDEN from using the status `[APPROVED]`. Only the Quality Agent has the authority to approve a task. Any violation of this rule breaks the project's integrity and quality gate. This maintains the project's "living memory." For Ad-Hoc requests, this step is skipped.
 - **Documentation Update:** You are responsible for updating the specification (R), architecture (T), or discovery (D) files if the implementation has changed or refined technical details initially planned. Documentation must be a living reflection of the code.
-- **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat. If you completed a task in T, explicitly mention if corresponding S or TEST tasks were also updated, so the Quality Agent can perform a cascade approval. After this, execute the **Successor Scanning** logic from Section 8.
+- **Output:** Respond with the generated code blocks followed by a brief confirmation and a Conventional Commits suggestion in the chat. If you completed a task in T, explicitly mention if corresponding S or TEST tasks were also updated, so the Quality Agent can perform a cascade approval.
 
-**8. PROACTIVE CHAINING & ADAPTIVE ORCHESTRATION**
-
-After marking a task as `[x]` in the Technical Checklist (T-file), you must evaluate the next steps in the roadmap:
-
-- **Step 1: Successor Identification.** Re-read the T-file to find tasks where the current task ID is in the `Depends On` field. Verify if ALL other dependencies for those successors are satisfied (`[x]`, `[APPROVED]`, or `[COMPLETED]`).
-- **Step 2: Evaluate Tools & Environment.** Before proposing an action, identify your orchestration capabilities. Analyze your available tools to see if you have `run_command` or platform-specific "call agent" functions. Identify if there is a known CLI (e.g., `add-agent`, `kiro-run`, `cursor-exec`) available in the environment.
-- **Step 3: Propose Action.**
-    - **Zero Successors:** Inform the user which tasks are still blocked and by whom.
-    - **Single Successor:** Ask: "Task [XXX] is now unblocked. Should I proceed with its implementation in this same chat?"
-    - **Multiple Successors (Parallelization):** 
-        - List all unblocked tasks.
-        - **Mandatory Question:** "I have identified multiple unblocked tasks ([IDs]). **Can I assign other agents to proceed with the next tasks?**"
-    - **Step 4: Tool-Aware Orchestration (The Conductor Role):**
-        - **Step 4.1: Skill Verification.** Check the available `<skills>` for any skill that provides instructions on how to use a CLI for agent delegation (e.g., `gemini-cli-workflow-delegation` or similar). If found, use the `view_file` tool to read the skill and follow its specific command-line templates.
-        - **Step 4.2: Synchronous Dispatch.** If a delegation skill is present and the `run_command` tool is available, execute the tasks using the instructed CLI. You **MUST** monitor the execution:
-            - Use `command_status` to wait for completion.
-            - If the subagent requests user interaction or input, you MUST relay this to the user in this chat.
-            - Once the subagent finishes, read its final report/output.
-        - **Step 4.3: Result Consolidation.** After the subagents finish, consolidate their results, update the status of the tasks in the technical roadmap (`T` file), and report the overall progress to the user.
-        - **Step 4.4: Fallback (Manual Delegation).** If NO delegation skill is found or if automated dispatch fails, provide the **Parallel Request Block** for each task and explicitly instruct the user to **trigger these tasks through their Agent Manager or tool-specific interface**.
-    - **Chaining Responsibility:** As the Orchestrator (Conductor), you are responsible for the entire flow. When a subagent finishes, evaluate the next unblocked tasks and propose/trigger them. Subagents themselves MUST NOT autonomously trigger successors when running in delegated mode.
