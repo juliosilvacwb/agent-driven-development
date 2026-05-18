@@ -25,10 +25,10 @@ Use the `run_command` tool to execute the `gemini` binary.
 
 #### Non-Interactive (Recommended for Orchestration)
 
-Use the `-p` flag ONLY for background tasks where NO interaction or monitoring is required.
+Use the `-p` flag for background tasks and `-m` to specify the model. To ensure maximum autonomy during parallel execution, always append `--approval-mode=yolo` to prevent tool execution blocks.
 
 ```powershell
-gemini -p "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity"
+gemini -m "gemini-3-flash-preview" -p "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity" --approval-mode=yolo
 ```
 
 ### 3. Orchestration & Centralization (The Conductor Role)
@@ -40,5 +40,22 @@ O agente que invoca esta skill (o agente atual no chat) atua como o **ponto cent
 - **Captura de Saída**: Uma vez que o subagente finalize, você deve ler o relatório final e usá-lo para atualizar o estado do projeto (roadmap T-file, etc.) e informar o usuário.
 - **Visibilidade**: O Agent Manager agrupa as sessões automaticamente através da árvore de processos.
 
+### 4. Windows Background Execution & ConPTY Troubleshooting
+
+No Windows, executar a CLI em background em processos paralelos pode resultar no erro `AttachConsole failed` originado pela biblioteca `node-pty` / ConPTY.
+
+Para solucionar ou prevenir este comportamento, **desative o shell interativo** nas configurações globais da CLI (`~/.gemini/settings.json`), o que força o fallback seguro para o `child_process.spawn`:
+
+```json
+{
+  "tools": {
+    "shell": {
+      "enableInteractiveShell": false
+    }
+  }
+}
+```
+
 > [!IMPORTANT]
 > Apenas use o comando `gemini`. Não utilize o subcomando `run`. O nome do workflow (iniciando com `/`) deve ser o primeiro termo dentro das aspas do prompt.
+> Utilize `--approval-mode=yolo` para garantir que subagentes operem com autonomia total em execuções paralelas.
