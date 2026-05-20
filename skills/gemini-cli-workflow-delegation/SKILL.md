@@ -29,7 +29,7 @@ Use the `-p` flag for background tasks and `-m` to specify the model. To ensure 
 
 #### Parallel Asynchronous Execution & Staggered Throttling (Avoid Capacity Errors)
 
-To run multiple workflows concurrently with different results, trigger them in **separate, isolated PowerShell instances** so they run in parallel without blocking each other. 
+To run multiple workflows concurrently with different results, trigger them in **separate, isolated commands** so they run in parallel without blocking each other.
 
 > [!IMPORTANT]
 > **Do NOT run multiple task initiations inside a single multi-line shell script or command block.** The Orchestrator agent must trigger each task in **separate, distinct shell interactions (separate `run_command` tool calls)**. 
@@ -37,16 +37,15 @@ To run multiple workflows concurrently with different results, trigger them in *
 Because spawning multiple agents simultaneously (bursts) can exhaust the transient **RPM (Requests Per Minute)** or **TPM (Tokens Per Minute)** quotas of the Gemini API due to heavy initial context loading, you must:
 1. Trigger the first task using a single `run_command` tool call.
 2. **Wait 5 to 10 seconds** before making the next `run_command` tool call for the subsequent task.
-3. Spawn each workflow in its own PowerShell window/instance using `Start-Process powershell`.
 
 ##### Command for the first task (executed in tool call #1):
 ```powershell
-Start-Process powershell -ArgumentList "-NoProfile -NoExit -Command `\"gemini -p `\"/engineer-agent implement Task 001...`\" --approval-mode=yolo`\""
+gemini -p "/engineer-agent implement Task 001..." --approval-mode=yolo
 ```
 
 ##### Command for the second task (executed in tool call #2, after a 5-10 seconds delay):
 ```powershell
-Start-Process powershell -ArgumentList "-NoProfile -NoExit -Command `\"gemini -p `\"/engineer-agent implement Task 002...`\" --approval-mode=yolo`\""
+gemini -p "/engineer-agent implement Task 002..." --approval-mode=yolo
 ```
 
 ### 3. Orchestration & Centralization (The Conductor Role)
