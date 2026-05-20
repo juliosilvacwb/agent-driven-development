@@ -27,24 +27,37 @@ Use the `run_command` tool to execute the `gemini` binary.
 
 Use the `-p` flag for background tasks and `-m` to specify the model. To ensure maximum autonomy during parallel execution, always append `--approval-mode=yolo` to prevent tool execution blocks.
 
+#### Transient Rate Limits & Throttling (Avoid Transient Capacity Errors)
+
+Making massive, simultaneous parallel requests (bursts) can exhaust the transient **RPM (Requests Per Minute)** or **TPM (Tokens Per Minute)** quotas of the Gemini API, generating false quota errors like *"You have exhausted your capacity on this model"*.
+
+To avoid this during parallel execution of subagents, **insert a delay of 5 to 6 seconds** between consecutive triggers. This distributes the initial context load and stabilizes API concurrency:
+
 ```powershell
-gemini -m "gemini-3-flash-preview" -p "/engineer-agent implement Task 001 - [Domain-Model]: Create User entity" --approval-mode=yolo
+# Example of staggered parallel triggers in PowerShell:
+gemini -p "/engineer-agent implement Task 001..." --approval-mode=yolo
+Start-Sleep -Seconds 6
+
+gemini -p "/engineer-agent implement Task 002..." --approval-mode=yolo
+Start-Sleep -Seconds 6
+
+gemini -p "/engineer-agent implement Task 003..." --approval-mode=yolo
 ```
 
 ### 3. Orchestration & Centralization (The Conductor Role)
 
-O agente que invoca esta skill (o agente atual no chat) atua como o **ponto centralizador** da operação.
+The agent invoking this skill (the current agent in the chat) acts as the **central point** of the operation.
 
-- **Sincronização Obrigatória**: Você **DEVE** monitorar o status do comando usando `command_status`.
-- **Relay de Interação**: Se a saída do comando indicar que o subagente está esperando por input ou decisão do usuário, repasse a pergunta neste chat e use `send_command_input` para enviar a resposta ao subagente.
-- **Captura de Saída**: Uma vez que o subagente finalize, você deve ler o relatório final e usá-lo para atualizar o estado do projeto (roadmap T-file, etc.) e informar o usuário.
-- **Visibilidade**: O Agent Manager agrupa as sessões automaticamente através da árvore de processos.
+- **Mandatory Synchronization**: You **MUST** monitor the status of the command using `command_status`.
+- **Interaction Relay**: If the command output indicates that the subagent is waiting for user input or decision, pass the question along in this chat and use `send_command_input` to send the response to the subagent.
+- **Output Capture**: Once the subagent finishes, you must read the final report and use it to update the project state (roadmap T-file, etc.) and inform the user.
+- **Visibility**: The Agent Manager groups the sessions automatically via the process tree.
 
 ### 4. Windows Background Execution & ConPTY Troubleshooting
 
-No Windows, executar a CLI em background em processos paralelos pode resultar no erro `AttachConsole failed` originado pela biblioteca `node-pty` / ConPTY.
+On Windows, running the CLI in the background in parallel processes can result in the `AttachConsole failed` error originating from the `node-pty` / ConPTY library.
 
-Para solucionar ou prevenir este comportamento, **desative o shell interativo** nas configurações globais da CLI (`~/.gemini/settings.json`), o que força o fallback seguro para o `child_process.spawn`:
+To troubleshoot or prevent this behavior, **disable the interactive shell** in the global CLI settings (`~/.gemini/settings.json`), which forces a safe fallback to `child_process.spawn`:
 
 ```json
 {
@@ -57,5 +70,5 @@ Para solucionar ou prevenir este comportamento, **desative o shell interativo** 
 ```
 
 > [!IMPORTANT]
-> Apenas use o comando `gemini`. Não utilize o subcomando `run`. O nome do workflow (iniciando com `/`) deve ser o primeiro termo dentro das aspas do prompt.
-> Utilize `--approval-mode=yolo` para garantir que subagentes operem com autonomia total em execuções paralelas.
+> Only use the `gemini` command. Do not use the `run` subcommand. The name of the workflow (starting with `/`) must be the first term within the prompt quotes.
+> Use `--approval-mode=yolo` to ensure subagents operate with full autonomy in parallel executions.
