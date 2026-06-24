@@ -52,6 +52,53 @@ This repository serves as a template and a reference for implementing Agent-Driv
     -   `/docs/tests/` (TEST-files: Coverage gaps and tasks)
     -   `/docs/bugs/` (B-files: Incident and reproduction scripts)
 
+### Invoking Agents
+
+Each agent is triggered by calling their slash command followed by a descriptive prompt detailing the task at hand. 
+
+Here is an example prompt for each agent:
+
+- **Discovery Agent**:
+  ```markdown
+  /discovery-agent locate the authentication logic and document it in D001-auth.md
+  ```
+- **PO Agent**:
+  ```markdown
+  /po-agent create a business requirements spec for the subscription payment system
+  ```
+- **Architect Agent**:
+  ```markdown
+  /architect-agent create the technical implementation plan for R001-subscriptions.md
+  ```
+- **Orchestrator Agent**:
+  ```markdown
+  /orchestrator-agent execute the roadmap tasks listed in T001-subscriptions.md
+  ```
+- **Engineer Agent**:
+  ```markdown
+  /engineer-agent implement task T001 in T001-subscriptions.md
+  ```
+- **Debugger Agent**:
+  ```markdown
+  /debugger-agent a user told me that receive an error message when login in the app, the error is "null pointer exception", the error occur in the login controller, the user login page is at /login
+  ```
+- **Security Agent**:
+  ```markdown
+  /security-agent analize the implementation of Task 001 in T001-subscriptions.md and search for any security vulnerabilities
+  ```
+- **Test Agent**:
+  ```markdown
+  /test-agent analize the implementation of Task 001 in T001-subscriptions.md and check test coverage
+  ```
+- **Quality Agent**:
+  ```markdown
+  /quality-agent review the implementation of T001-subscriptions.md
+  ```
+- **Documentation Agent**:
+  ```markdown
+  /documentation-agent synchronize API docs and diagrams with the T001-subscriptions.md implementation
+  ```
+
 ### Status Lifecycle & Immutability
 
 To prevent "technical amnesia" and context drift, ADD follows a strict status lifecycle for every task, requirement, and test:
