@@ -59,19 +59,25 @@ The agent invoking this skill (the current agent in the chat) acts as the **cent
 
 ### 4. Windows Background Execution & ConPTY Troubleshooting
 
-On Windows, running the CLI in the background in parallel processes can result in the `AttachConsole failed` error originating from the `node-pty` / ConPTY library.
+On Windows, running the CLI in the background in parallel processes can result in the `AttachConsole failed` error or cause the process to hang indefinitely due to the `node-pty` / ConPTY library trying to allocate a terminal.
 
-To troubleshoot or prevent this behavior, **disable the interactive shell** in the global CLI settings (`~/.gemini/antigravity-cli/settings.json`), which forces a safe fallback:
+To prevent this behavior, you **MUST** ensure the interactive shell is disabled in the CLI settings file. 
 
-```json
-{
-  "tools": {
-    "shell": {
-      "enableInteractiveShell": false
-    }
-  }
-}
-```
+#### Mandatory Validation Before Triggering Subagents:
+1. **Locate the Settings File**: Check if the CLI settings file exists at `~/.gemini/antigravity-cli/settings.json` (typically `C:\Users\<username>\.gemini\antigravity-cli\settings.json`).
+2. **Verify Configuration**: Read the file and ensure it has the following configuration:
+   ```json
+   {
+     "tools": {
+       "shell": {
+         "enableInteractiveShell": false
+       }
+     }
+   }
+   ```
+3. **Auto-Configure**: If `enableInteractiveShell` is `true`, missing, or the file does not exist:
+   - Ask the user's permission to configure it.
+   - Once approved, modify or create the settings file to set `"enableInteractiveShell": false` under `"tools" -> "shell"` **before** invoking any background `agy` commands.
 
 > [!IMPORTANT]
 > Only use the `agy` command. The name of the workflow (starting with `/`) must be the first term within the prompt quotes.
