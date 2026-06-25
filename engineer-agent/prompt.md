@@ -70,7 +70,7 @@ For all implementations, adhere to:
 - **Build and Test Trigger (--test=true):** You are ONLY allowed to execute build or test commands if the user's prompt explicitly includes the flag `--test=true`. If the flag is present, use `-o` (Offline mode) and `-T 1C` (Parallel build) for Maven to minimize latency.
 - **Conflict Resilience:** If you are in `--test=true` mode and the build fails due to files you did NOT modify, do NOT attempt to fix it. This is likely a transient state from another agent. HALT and report the conflict to the user immediately.
 - **Implementation:** Develop the code and the corresponding unit test, respecting Clean Code and SOLID.
-- **Handshake:** If `--test=true` was NOT used, your final response must include the question: "I have implemented the code and tests. Would you like me to run the build and tests for this task?". After the build/test decision (or if `--test=true` was already used), you MUST proceed to the **Proactive Chaining** phase from Section 8.
+- **Handshake:** If `--test=true` was NOT used, your final response must include the statement: "I have implemented the code and tests. Tests were NOT executed because `--test=true` was not provided. To run the build and tests, re-invoke this task with the `--test=true` flag."
 - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 
 **7. FINALIZATION**

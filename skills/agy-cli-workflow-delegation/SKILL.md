@@ -27,6 +27,17 @@ Use the `run_command` tool to execute the `agy` binary.
 
 Use the `-p` (or `--print`/`--prompt`) flag to run a single prompt non-interactively, and `--model` to specify the model if needed. To ensure maximum autonomy during parallel execution, always append `--dangerously-skip-permissions` to prevent tool execution permission blocks.
 
+> [!IMPORTANT]
+> **Non-Interactive Autonomy:** All delegated workflows MUST be fully autonomous. The subagent MUST NOT ask questions, request confirmations, or wait for user input. Any workflow that contains interactive prompts (e.g., "Would you like me to...?") will cause the subagent to hang indefinitely in `-p` (print) mode. If a workflow requires decisions, those decisions must be encoded in the prompt or handled via flags (e.g., `--test=true`).
+
+#### Timeout Configuration
+
+The default `--print-timeout` is 5 minutes (`5m0s`). For complex tasks that require more time (e.g., full implementations with multiple files), increase this value:
+
+```powershell
+agy -p "/engineer-agent implement Task 001..." --dangerously-skip-permissions --print-timeout 15m0s
+```
+
 #### Parallel Asynchronous Execution & Staggered Throttling (Avoid Capacity Errors)
 
 To run multiple workflows concurrently with different results, trigger them in **separate, isolated commands** so they run in parallel without blocking each other.
@@ -40,12 +51,12 @@ Because spawning multiple agents simultaneously (bursts) can exhaust the transie
 
 ##### Command for the first task (executed in tool call #1):
 ```powershell
-agy -p "/engineer-agent implement Task 001..." --dangerously-skip-permissions
+agy -p "/engineer-agent implement Task 001..." --dangerously-skip-permissions --print-timeout 15m0s
 ```
 
 ##### Command for the second task (executed in tool call #2, after a 5-10 seconds delay):
 ```powershell
-agy -p "/engineer-agent implement Task 002..." --dangerously-skip-permissions
+agy -p "/engineer-agent implement Task 002..." --dangerously-skip-permissions --print-timeout 15m0s
 ```
 
 ### 3. Orchestration & Centralization (The Conductor Role)
@@ -61,13 +72,14 @@ The agent invoking this skill (the current agent in the chat) acts as the **cent
 
 On Windows, running the CLI in the background in parallel processes can result in the `AttachConsole failed` error or cause the process to hang indefinitely due to the `node-pty` / ConPTY library trying to allocate a terminal.
 
-To prevent this behavior, you **MUST** ensure the interactive shell is disabled in the CLI settings file. 
+To prevent this behavior, you **MUST** ensure the interactive shell and terminal sandbox are disabled in the CLI settings file. 
 
 #### Mandatory Validation Before Triggering Subagents:
 1. **Locate the Settings File**: Check if the CLI settings file exists at `~/.gemini/antigravity-cli/settings.json` (typically `C:\Users\<username>\.gemini\antigravity-cli\settings.json`).
-2. **Verify Configuration**: Read the file and ensure it has the following configuration:
+2. **Verify Configuration**: Read the file and ensure it has the following configurations:
    ```json
    {
+     "enableTerminalSandbox": false,
      "tools": {
        "shell": {
          "enableInteractiveShell": false

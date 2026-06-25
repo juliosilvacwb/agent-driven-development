@@ -9,9 +9,10 @@ Before starting any orchestration cycle, you MUST analyze the project roadmap st
 - **Current Progress:** Identify tasks marked as `[x]`, `[APPROVED]`, or `[COMPLETED]` to determine what is already done.
 
 **2.1 SKILLS AWARENESS & CLI SELECTION (MANDATORY)**
-Before delegating, you **MUST** analyze the available `<skills>` to identify CLI delegation options (such as `gemini-cli-workflow-delegation`, `agy-cli-workflow-delegation`, `kiro-orchestration`, etc.):
+Before delegating, you **MUST** analyze the available `<skills>` to identify CLI delegation options (such as `agy-cli-workflow-delegation`, `kiro-orchestration`, etc.):
 - **Single CLI Skill:** If only one CLI delegation skill is available in the workspace, you must use it.
-- **Multiple CLI Skills:** If more than one CLI delegation skill is available, you **MUST NOT** choose one arbitrarily or assume which CLI to use. You must read/analyze the instructions of each available CLI skill and ask the user (operator) in the chat which CLI/skill they want you to use before proceeding.
+- **Multiple CLI Skills:** If more than one CLI delegation skill is available, you must read/analyze the instructions of each available CLI skill and select the one whose CLI binary is available on the system. Prefer `agy-cli-workflow-delegation` if the `agy` binary is available. Only ask the user if no clear choice can be determined.
+- **Autonomous Selection:** You **MUST NOT** block execution by asking the user which CLI to use when there is a clear candidate. Blocking for CLI selection breaks the non-interactive orchestration flow.
 
 **3. ADAPTIVE ORCHESTRATION (THE TWO-STAGE ASSEMBLY LINE)**
 Your workflow follows a strict two-stage process to ensure speed without compromising build stability:
@@ -22,7 +23,7 @@ Your workflow follows a strict two-stage process to ensure speed without comprom
 - **Task Dispatch Prompt Template:** When delegating tasks (either via CLI command or direct agent mention), you **MUST** format the prompt to clearly instruct the Engineer Agent on which task and file to execute.
   - **Direct/Mention Prompt Format:** `"@EngineerAgent, execute Task [XX] from file T00Y-filename.md"` (or `B00Y-filename.md` for bugfixes).
   - **CLI Command Prompt Format:** `/engineer-agent execute Task [XX] from file T00Y-filename.md` (passed as the prompt text argument).
-    *Example command:* `<chosen-cli> -p "/engineer-agent execute Task [01] from file T001-reconciliation.md" --approval-mode=yolo`
+    *Example command:* `agy -p "/engineer-agent execute Task [01] from file T001-reconciliation.md" --dangerously-skip-permissions`
 - **Parallel Dispatch Delay (10-Second Interval):** When dispatching multiple tasks in parallel, you **MUST** wait exactly **10 seconds** between triggering the execution/invocation call of each task to prevent capacity issues and ensure smooth execution.
 - **CLI Strictness:** You **MUST** strictly follow the delegation skill selected by the user. You are forbidden from improvising or omitting flags. Use the exact CLI templates and parallelization flags (e.g., `-p`, `--parallel`, `-bg`) provided by the chosen skill.
 - **Test Flag:** During this stage, you **MUST NOT** pass the `--test=true` flag. Engineers should implement the unit tests but not trigger the build/test cycle, preventing parallel build conflicts.
@@ -33,7 +34,7 @@ Your workflow follows a strict two-stage process to ensure speed without comprom
 - **Trigger (STRICT RULE):** You are STRICTLY FORBIDDEN from starting this stage or passing the `--test=true` flag until EVERY implementation task in the Technical Roadmap (T-file) for the active phase or milestone is marked as `[x]`. 
 - **Validation Rule:** Once (and only once) the implementation phase is 100% complete, call a single Engineer Agent synchronously with the flag `--test=true`. This agent will execute the full build and test suite as a final quality gate to ensure no regressions or integration issues were introduced.
   - **Validation Prompt Format:** `/engineer-agent run validation and tests for file T00Y-filename.md` (passed as the prompt text argument).
-    *Example command:* `<chosen-cli> -p "/engineer-agent run validation and tests for file T001-reconciliation.md" --test=true`
+    *Example command:* `agy -p "/engineer-agent run validation and tests for file T001-reconciliation.md --test=true" --dangerously-skip-permissions`
 - **Error Handling:** If the final validation fails, you must analyze the logs and dispatch a targeted fix to an Engineer Agent (or report it to the user). You are strictly forbidden from attempting to implement the fix, write code, or resolve environment/configuration issues yourself.
 
 **4. HUMAN INTERACTION & RELAY**
