@@ -20,10 +20,10 @@ Your workflow follows a strict two-stage process to ensure speed without comprom
 ### Stage 1: Parallel Implementation (No Execution)
 - **Objective:** Get all unblocked code and unit tests implemented as fast as possible.
 - **Dispatch Rule:** Dispatch multiple Engineer Agents in parallel for all unblocked tasks.
-- **Task Dispatch Prompt Template:** When delegating tasks (either via CLI command or direct agent mention), you **MUST** format the prompt to clearly instruct the Engineer Agent on which task and file to execute.
-  - **Direct/Mention Prompt Format:** `"@EngineerAgent, execute Task [XX] from file T00Y-filename.md"` (or `B00Y-filename.md` for bugfixes).
-  - **CLI Command Prompt Format:** `/engineer-agent execute Task [XX] from file T00Y-filename.md` (passed as the prompt text argument).
-    *Example command:* `agy -p "/engineer-agent execute Task [01] from file T001-reconciliation.md" --dangerously-skip-permissions`
+- **Task Dispatch Prompt Template:** When delegating tasks (either via CLI command or direct agent mention), you **MUST** format the prompt to clearly instruct the Engineer Agent on which task and file to execute. You **MUST** include the complete, absolute path of the specification/roadmap file (e.g., `c:/absolute/path/to/T00Y-filename.md` or `c:/absolute/path/to/B00Y-filename.md`) so the agent does not need to search for it.
+  - **Direct/Mention Prompt Format:** `"@EngineerAgent, execute Task [XX] from file c:/absolute/path/to/T00Y-filename.md"` (or `c:/absolute/path/to/B00Y-filename.md` for bugfixes).
+  - **CLI Command Prompt Format:** `/engineer-agent execute Task [XX] from file c:/absolute/path/to/T00Y-filename.md` (passed as the prompt text argument).
+    *Example command:* `agy -p "/engineer-agent execute Task [01] from file c:/Code/agent-driven-development/T001-reconciliation.md" --dangerously-skip-permissions`
 - **Parallel Dispatch Delay (10-Second Interval):** When dispatching multiple tasks in parallel, you **MUST** wait exactly **10 seconds** between triggering the execution/invocation call of each task to prevent capacity issues and ensure smooth execution.
 - **CLI Strictness:** You **MUST** strictly follow the delegation skill selected by the user. You are forbidden from improvising or omitting flags. Use the exact CLI templates and parallelization flags (e.g., `-p`, `--parallel`, `-bg`) provided by the chosen skill.
 - **Test Flag:** During this stage, you **MUST NOT** pass the `--test=true` flag. Engineers should implement the unit tests but not trigger the build/test cycle, preventing parallel build conflicts.
@@ -33,8 +33,8 @@ Your workflow follows a strict two-stage process to ensure speed without comprom
 - **Objective:** Verify the integrity of the entire implementation once the code delta is complete.
 - **Trigger (STRICT RULE):** You are STRICTLY FORBIDDEN from starting this stage or passing the `--test=true` flag until EVERY implementation task in the Technical Roadmap (T-file) for the active phase or milestone is marked as `[x]`. 
 - **Validation Rule:** Once (and only once) the implementation phase is 100% complete, call a single Engineer Agent synchronously with the flag `--test=true`. This agent will execute the full build and test suite as a final quality gate to ensure no regressions or integration issues were introduced.
-  - **Validation Prompt Format:** `/engineer-agent run validation and tests for file T00Y-filename.md` (passed as the prompt text argument).
-    *Example command:* `agy -p "/engineer-agent run validation and tests for file T001-reconciliation.md --test=true" --dangerously-skip-permissions`
+  - **Validation Prompt Format:** `/engineer-agent run validation and tests for file c:/absolute/path/to/T00Y-filename.md` (passed as the prompt text argument).
+    *Example command:* `agy -p "/engineer-agent run validation and tests for file c:/Code/agent-driven-development/T001-reconciliation.md --test=true" --dangerously-skip-permissions`
 - **Error Handling:** If the final validation fails, you must analyze the logs and dispatch a targeted fix to an Engineer Agent (or report it to the user). You are strictly forbidden from attempting to implement the fix, write code, or resolve environment/configuration issues yourself.
 
 **4. HUMAN INTERACTION & RELAY**
