@@ -9,16 +9,17 @@ In ADD, context is preserved in Markdown (`.md`) files. These artifacts serve as
 
 The ADD workflow uses specialized agents for each stage of development:
 
-1.  **[Discovery Agent](./discovery-agent/)**: The "Archaeologist". Performs forensics on existing code to establish technical facts.
-2.  **[PO Agent](./po-agent/)**: The "Interrogator". Refuses vague requests and converts ideas into detailed PRDs.
-3.  **[Architect Agent](./architect-agent/)**: The "Blueprint Maker". Bridges the gap between requirements and code with a technical roadmap. **Scope: Technical specification only. Does not implement code or delegate tasks.**
-4.  **[Orchestrator Agent](./orchestrator-agent/)**: The "Conductor". Senior Engineer responsible for adaptive orchestration, parallelization, and task delegation to subagents.
-5.  **[Engineer Agent](./engineer-agent/)**: The "Muscle". Executes structured tasks (from T, B, S, or TEST files) following strict TDD. **Scope: Atomic task implementation. Focuses exclusively on the current task without look-ahead or delegation.**
-6.  **[Debugger Agent](./debugger-agent/)**: The "Investigator". Proves errors with failing tests before proposing any fix.
-7.  **[Security Agent](./security-agent/)**: The "DevSecOps Guardian". Performs SAST/DAST on implemented code and generates actionable vulnerability fix loops.
-8.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes code for coverage gaps and generates precision testing roadmaps. **Scope: Coverage discovery and test specification only.**
-9.  **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who cross-validates business intent, technical standards, security patches, and test coverage.
-10. **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
+1.  **[PM Agent](./pm-agent/)**: The "Strategist". Transforms business vision into prioritized product ideas through structured brainstorming, market analysis, and strategic prioritization. **Scope: Ideation and opportunity mapping only. Does not write PRDs or technical specs.**
+2.  **[Discovery Agent](./discovery-agent/)**: The "Archaeologist". Performs forensics on existing code to establish technical facts.
+3.  **[PO Agent](./po-agent/)**: The "Interrogator". Refuses vague requests and converts ideas into detailed PRDs.
+4.  **[Architect Agent](./architect-agent/)**: The "Blueprint Maker". Bridges the gap between requirements and code with a technical roadmap. **Scope: Technical specification only. Does not implement code or delegate tasks.**
+5.  **[Orchestrator Agent](./orchestrator-agent/)**: The "Conductor". Senior Engineer responsible for adaptive orchestration, parallelization, and task delegation to subagents.
+6.  **[Engineer Agent](./engineer-agent/)**: The "Muscle". Executes structured tasks (from T, B, S, or TEST files) following strict TDD. **Scope: Atomic task implementation. Focuses exclusively on the current task without look-ahead or delegation.**
+7.  **[Debugger Agent](./debugger-agent/)**: The "Investigator". Proves errors with failing tests before proposing any fix.
+8.  **[Security Agent](./security-agent/)**: The "DevSecOps Guardian". Performs SAST/DAST on implemented code and generates actionable vulnerability fix loops.
+9.  **[Test Agent](./test-agent/)**: The "Forensics Expert". Analyzes code for coverage gaps and generates precision testing roadmaps. **Scope: Coverage discovery and test specification only.**
+10. **[Quality Agent](./quality-agent/)**: The "Gatekeeper". Final reviewer who cross-validates business intent, technical standards, security patches, and test coverage.
+11. **[Documentation Agent](./documentation-agent/)**: The "Librarian". Synchronizes the specs, plans, and final implementation.
 
 
 
@@ -44,6 +45,7 @@ This repository serves as a template and a reference for implementing Agent-Driv
 1.  **Define the Brain**: Choose a high-reasoning model (e.g., Gemini Pro, Claude Opus) for the PO and Architect roles to ensure depth and clarity.
 2.  **Define the Muscle**: Choose a fast, instruction-following model (e.g., Gemini Flash) for the Engineer role to optimize for speed and adherence to the plan.
 3.  **Create the Artifacts**: Ensure your project has a `/docs` directory to store the following:
+    -   `/docs/product-strategy/` (PS-files)
     -   `/docs/discovery/` (D-files)
     -   `/docs/business-requirements/` (R-files)
     -   `/docs/architecture/` (T-files)
@@ -58,6 +60,10 @@ Each agent is triggered by calling their slash command followed by a descriptive
 
 Here is an example prompt for each agent:
 
+- **PM Agent**:
+  ```markdown
+  /pm-agent brainstorm feature ideas to increase user engagement in our financial management platform
+  ```
 - **Discovery Agent**:
   ```markdown
   /discovery-agent locate the authentication logic and document it in D001-auth.md
