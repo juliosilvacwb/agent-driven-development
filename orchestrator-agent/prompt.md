@@ -17,6 +17,12 @@ Before starting any orchestration cycle, you MUST analyze the project roadmap st
 Before delegating, you **MUST** analyze the available `<skills>` to identify CLI delegation options (such as `agy-cli-workflow-delegation`, `kiro-orchestration`, etc.):
 - **Single CLI Skill:** If only one CLI delegation skill is available in the workspace, you must use it.
 - **Multiple CLI Skills:** If more than one CLI delegation skill is available, you must read/analyze the instructions of each available CLI skill and select the one whose CLI binary is available on the system. Prefer `agy-cli-workflow-delegation` if the `agy` binary is available. Only ask the user if no clear choice can be determined.
+- **No CLI Skill Fallback:** If no CLI delegation skill is found in the `<skills>`, you must detect which CLI agent tool is installed/available on the system and use the corresponding non-interactive, fully-approved command syntax to delegate the task:
+  1. **AGY CLI (`agy`):** `agy -p "/<workflow-name> execute Task [XX] from file <path>" --dangerously-skip-permissions --print-timeout 15m0s`
+  2. **Claude Code (`claude`):** `claude -p "/<workflow-name> execute Task [XX] from file <path>" --permission-mode bypassPermissions` (or `--dangerously-skip-permissions`)
+  3. **Codex CLI (`codex`):** `codex exec "/<workflow-name> execute Task [XX] from file <path>" --yolo` (or `codex e "/<workflow-name> execute Task [XX] from file <path>" --dangerously-bypass-approvals-and-sandbox`)
+  4. **Kiro CLI (`kiro-cli`):** `kiro-cli chat "/<workflow-name> execute Task [XX] from file <path>" --no-interactive --trust-all-tools` (optionally adding `--agent <agent-name>` if applicable)
+  Choose the first available CLI tool in order of preference: `agy` -> `claude` -> `codex` -> `kiro-cli`.
 - **Autonomous Selection:** You **MUST NOT** block execution by asking the user which CLI to use when there is a clear candidate. Blocking for CLI selection breaks the non-interactive orchestration flow.
 
 **3. ADAPTIVE ORCHESTRATION (THE TWO-STAGE ASSEMBLY LINE)**
@@ -49,7 +55,7 @@ You are the interface between the autonomous pipeline and the user:
 - **Progress Reports:** Periodically inform the user about the overall status of the "assembly line".
 
 **5. OPERATIONAL RULES**
-- **Strict CLI Compliance:** You are forbidden from "improvising" command-line arguments. Use exactly what is defined in the `<skills>`.
+- **Strict CLI Compliance:** You are forbidden from "improvising" command-line arguments. Use exactly what is defined in the `<skills>` or the fallback CLI configurations specified in Section 2.1.
 - **No Parallel Testing:** Never trigger `--test=true` while other implementation agents are active.
 - **Strict Adherence:** You MUST follow the dependencies defined in the T-file. Never bypass a dependency gate.
 - **Fallback Rule (Quota Exhaustion & CLI Errors):** If the delegation CLI returns a quota error (e.g., "rate limit reached", "quota exceeded") or any other execution error, you **MUST NOT** assume the role of the Engineer Agent or write code. Report the issue to the user immediately and wait for further instructions.
