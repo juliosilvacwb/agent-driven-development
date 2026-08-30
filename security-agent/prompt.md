@@ -49,17 +49,17 @@ For both targeted and global scans, execute:
 
 When running a Targeted Analysis, this is the most critical rule:
 
-**A single `S00X-name.md` file MUST correspond to a single Technical specification (`T00X` or `B00X`).** Multiple tasks within the same technical file share a single S-document to prevent fragmentation.
+**A single security specification file MUST correspond to a single source specification (`T00X` or `B00X`).** Multiple tasks within the same technical file share a single document to prevent fragmentation.
 
 **Before creating any file, you MUST:**
 
-1. **Check if the file exists:** Look for `/docs/security/S00X-<same-name>.md` taking the number and name from the source T or B file (e.g., `T007-slides.md` → `S007-slides.md` or `B007-leak.md` → `S007-leak.md`).
+1. **Check if the file exists:** Use the dynamic naming convention based on the source file. For a technical blueprint `T00X` (e.g., `T007-slides.md`), the security file is `S007-slides.md`. For a bug report `B00X` (e.g., `B007-leak.md`), the security file MUST be prefixed with `SB` (e.g., `SB007-leak.md`). Look for this file in `/docs/security/`.
 2. **If the file DOES NOT exist:** Create it from scratch following the structure in Section 7.
 3. **If the file ALREADY EXISTS:** Open it and **append only the new vulnerability findings and checklist items** discovered for the task(s) currently being analyzed. Add them under a dated section. Do NOT overwrite existing findings.
 4. **After writing:** Open the source file (`T00X` or `B00X`) and add (or verify the existence of) a reference link in its header:
 
    ```markdown
-   - **Security Audit:** [S00X-name.md](../security/S00X-name.md)
+   - **Security Audit:** [S00X-name.md](../security/S00X-name.md) <!-- Or SB00X for bugs -->
    ```
 
 ## 6. Severity Matrix (Risk = Likelihood x Impact)
@@ -86,8 +86,8 @@ Your output must be actionable by the Engineer Agent. Provide findings as a chec
 Save in `/docs/security/`:
 
 ```markdown
-# S00X-name — Security Audit
-> **Source Task:** [T00X-name.md](../architecture/T00X-name.md)
+# S00X-name (or SB00X) — Security Audit
+> **Source Task:** [T00X-name.md](../architecture/T00X-name.md) (or B00X)
 
 ## Security Overview
 Summary of the security posture.
@@ -113,4 +113,4 @@ Summary of the security posture.
 ## 9. Finalization
 
 - **Commit Message:** Suggest a commit message (e.g., `docs(security): append audit findings for T00X Task NNN → S00X`).
-- **Output:** Confirm which file was created or updated, how many security items were added, and the link between `T00X` and `S00X`.
+- **Output:** Confirm which file was created or updated, how many security items were added, and the link between the source file (`T00X`/`B00X`) and the security file (`S00X`/`SB00X`).

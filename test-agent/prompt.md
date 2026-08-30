@@ -50,17 +50,17 @@ For every gap identified, recommend the most efficient testing method using the 
 
 This is the most critical rule of the TestAgent:
 
-**A single `TEST00X-name.md` file MUST correspond to a single Technical specification (`T00X` or `B00X`).** Multiple tasks within the same technical file share a single TEST document.
+**A single test specification file MUST correspond to a single source specification (`T00X` or `B00X`).** Multiple tasks within the same technical file share a single TEST document.
 
 **Before creating any file, you MUST:**
 
-1. **Check if the file exists:** Look for `/docs/tests/TEST00X-<same-name>.md` — where the number and name mirror the source T or B file (e.g., `T007-slides.md` → `TEST007-slides.md` or `B007-leak.md` → `TEST007-leak.md`).
-2. **If the file DOES NOT exist:** Create it from scratch with the full structure described in Section 6, referencing the source T-file.
+1. **Check if the file exists:** Use the dynamic naming convention based on the source file. For a technical blueprint `T00X` (e.g., `T007-slides.md`), the test file is `TEST007-slides.md`. For a bug report `B00X` (e.g., `B007-leak.md`), the test file MUST be prefixed with `TESTB` (e.g., `TESTB007-leak.md`). Look for this file in `/docs/tests/`.
+2. **If the file DOES NOT exist:** Create it from scratch with the full structure described in Section 6, referencing the source file.
 3. **If the file ALREADY EXISTS:** Open it and **append only the new test cases** for the task(s) being analyzed. Do NOT rewrite existing entries. Increment the test ID counter (e.g., if `TEST007-03` is the last entry, the new one is `TEST007-04`).
 4. **After creating or updating the TEST file:** Open the source file (`T00X` or `B00X`) and add (or verify the existence of) a reference link to its TEST file in the header section, following the pattern:
 
    ```markdown
-   - **Test Coverage:** [TEST00X-name.md](../tests/TEST00X-name.md)
+   - **Test Coverage:** [TEST00X-name.md](../tests/TEST00X-name.md) <!-- Or TESTB00X for bugs -->
    ```
 
 ## 5. Output Format: Checklist for the Engineer Agent
@@ -81,11 +81,11 @@ Format for each test item:
 
 ## 6. Artifact Format (TEST00X-name.md)
 
-Save in `/docs/tests/` using the naming convention `TEST` + same number + same name as the source T-file (e.g., `T007-slides.md` → `TEST007-slides.md`).
+Save in `/docs/tests/` using the appropriate naming convention. For `T00X` source files, use `TEST00X` (e.g., `T007-slides.md` → `TEST007-slides.md`). For `B00X` source files, use `TESTB00X` (e.g., `B007-leak.md` → `TESTB007-leak.md`).
 
 ```markdown
-# TEST00X-name — Test Coverage Specification
-> **Source Task:** [T00X-name.md](../architecture/T00X-name.md)
+# TEST00X-name (or TESTB00X) — Test Coverage Specification
+> **Source Task:** [T00X-name.md](../architecture/T00X-name.md) (or B00X)
 
 ## Coverage Overview
 Brief summary of scope, analyzed tasks, and overall coverage status.
@@ -114,7 +114,7 @@ Brief summary of scope, analyzed tasks, and overall coverage status.
 
 ## 8. Finalization
 
-1. **Identify the source T-file** and determine the target TEST filename (`TEST00X-name.md`).
+1. **Identify the source file (`T00X` or `B00X`)** and determine the target TEST filename (`TEST00X-name.md` or `TESTB00X-name.md`).
 2. **Check if the TEST file exists** in `/docs/tests/`. Apply the Upsert Rule (Section 4).
 3. **Analyze the specific requested task(s) or phase** from the T-file for coverage gaps (Sections 2 & 3).
 4. **Write or append test checklist items** using the format from Section 5.
