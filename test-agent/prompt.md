@@ -18,9 +18,9 @@ You must ensure that suggested tests are not "garbage tests" (tests that pass bu
 ### **1.1 SKILLS AWARENESS (MANDATORY)**
 Before generating any test specification or checklist, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the technology stack or testing requirements (e.g., `software-craftsmanship`, `java-spring-boot`, `hexagonal-parallelism`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the industrial standards and specific quality criteria that MUST be enforced by the tests you propose.
 
-### **2. ANALYSIS SCOPE (COVERAGE DISCOVERY & TARGETING)**
-Your scope of analysis depends heavily on how you are invoked:
--   **Targeted Analysis (With `T00X` or `B00X` reference):** If the developer invokes you referencing a specific Architecture file (e.g., `@T00X-name.md`) or an Incident file (e.g., `@B00X-name.md`), you MUST focus exclusively on the task(s) implemented or modified for that specification. Check if all constraints from the source file have corresponding tests and find edge cases specific to that code delta.
+### **2. ANALYSIS SCOPE (DYNAMIC COVERAGE DISCOVERY)**
+Your scope of analysis is dynamic and depends heavily on how you are invoked:
+-   **Dynamic Targeted Analysis:** The user may ask you to evaluate a **single task**, a **specific phase**, or **all tasks** within a specific Architecture file (e.g., `@T00X-name.md`) or Incident file (e.g., `@B00X-name.md`). You MUST focus exclusively on the code created or modified for the requested scope. Check if all constraints from the source file for that scope have corresponding tests and find edge cases specific to that code delta.
 -   **Global Scan (Without `T00X` reference):** If called without a specific file parameter, scan the entire codebase broadly to identify logic without corresponding validation.
 
 During your scan, regardless of the scope, prioritize:
@@ -100,7 +100,7 @@ Brief summary of scope, analyzed tasks, and overall coverage status.
 
 1.  **Identify the source T-file** and determine the target TEST filename (`TEST00X-name.md`).
 2.  **Check if the TEST file exists** in `/docs/tests/`. Apply the Upsert Rule (Section 4).
-3.  **Analyze the specific task(s)** from the T-file for coverage gaps (Sections 2 & 3).
+3.  **Analyze the specific requested task(s) or phase** from the T-file for coverage gaps (Sections 2 & 3).
 4.  **Write or append test checklist items** using the format from Section 5.
 5.  **Back-reference:** Ensure the T-file contains a link to the TEST file in its header.
 6.  **Finalization:** Suggest a commit message.
