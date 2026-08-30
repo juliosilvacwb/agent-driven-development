@@ -107,7 +107,7 @@ Only after these answers does the agent consolidate the single source of truth: 
 
 With specification **R** consolidated, the **Architect Agent** springs into action. It doesn't write the final code but draws the blueprint. Since the `/docs/requirements` directory can contain dozens of specifications, the developer acts as the conductor, directing the agent's focus to the correct index.
 
-#### Creation Prompt (System Prompt)
+#### Creation Prompt (System Prompt) - Architect Agent
 
 > *"You are a Senior Software Architect expert in polyglot systems, security, and scalability.
 >
@@ -222,7 +222,7 @@ I usually number the files to facilitate location via `@` in the chat:
 - **T (Architecture Tasks):** e.g., `T001-reconciliation.md`, `T002-checkout.md`.
 - **B (Bugfix/Behavior):** e.g., `B001-fix-error.md` (*Note: This artifact and the Debugger Agent will be detailed further in the "Safety Net" section of this article.*)
 
-#### Creation Prompt (System Prompt)
+#### Creation Prompt (System Prompt) - Engineer Agent
 
 > *"You are a Senior Software Engineer specialized in high-performance coding, maintainability, and Test-Driven Development (TDD). Your core responsibility is the surgical execution of technical tasks defined in T files, strictly adhering to the business logic provided in R files.
 >
@@ -239,6 +239,7 @@ I usually number the files to facilitate location via `@` in the chat:
 >
 > **3. ATOMIC MISSION & SCOPE EXECUTION**
 > Your execution scope depends on your prompt:
+>
 > - **Formulated Scope:** If a task file (T, B, S, or TEST) is provided, implement EXCLUSIVELY what was requested in it, guided by the functional specification (R).
 > - **Ad-Hoc Scope:** If provided with a direct description, solve ONLY the specific problem described by the developer, maintaining the same rigorous implementation standard.
 >
@@ -274,7 +275,7 @@ The developer orchestrates the execution with surgical precision:
 
 Use Git to your advantage. I recommend making a commit for each finalized task marked as `[x]`. This serves not only for versioning but allows you to track the exact evolution of the AI's reasoning through the diff. If the AI deviates from the pattern in Task [03], you have a **clean restore point** at Task [02].
 
-**The Differentiator: The Micro-Code Review**
+#### The Differentiator: The Micro-Code Review
 
 By working with this addressing (R001, T001), we eliminate ambiguities. The generated code is focused:
 
@@ -289,6 +290,7 @@ By working with this addressing (R001, T001), we eliminate ambiguities. The gene
 Modern software engineering demands resiliency. We cannot treat security as a patch applied before deployment or test coverage as an afterthought. To scale our DevSecOps capabilities safely with AI, we integrated two specialized guardians into the ADD pipeline:
 
 #### The Test Agent (Quality Forensics)
+
 While the Engineer Agent practices TDD, complex logic can sometimes bypass initial designs. Once the Engineer completes a task, the Test Agent runs a delta analysis to check branch coverage and unmocked connections. It then updates a single, consolidated coverage document — the `TEST-file` (`/docs/tests/TEST00X.md`) — that is shared across **all tasks of the same T-file**.
 
 ##### The Golden Rule: One TEST File per T-File
@@ -304,24 +306,30 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 > Your mission is to act as a 'Quality Forensics Expert,' analyzing source code to identify coverage gaps, edge cases, and complex logic that lacks validation. You must transform these 'blind spots' into a structured, actionable test checklist that the Engineer Agent can implement.
 >
 > ### **1. CORE PRINCIPLES (QUALITY STANDARDS)**
+>
 > You must ensure that suggested tests are not 'garbage tests' (tests that pass but don't verify anything). Follow these rules:
-> -   **AAA Pattern:** All suggested test structures must follow Arrange (Setup), Act (Execution), Assert (Verification).
-> -   **Independence:** Tests must be atomic and not depend on the state of other tests.
-> -   **Meaningful Assertions:** Avoid generic `assertTrue(true)`. Suggest assertions that verify the specific state change or return value.
-> -   **Performance:** Prefer Unit tests over Integration tests where possible to keep the CI/CD pipeline fast.
-> -   **Immutability of Approved Tests:** If a test item in a `TEST` file or a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT re-evaluate, modify, or suggest changes to these items. They are the baseline of quality for the project.
+>
+> - **AAA Pattern:** All suggested test structures must follow Arrange (Setup), Act (Execution), Assert (Verification).
+> - **Independence:** Tests must be atomic and not depend on the state of other tests.
+> - **Meaningful Assertions:** Avoid generic `assertTrue(true)`. Suggest assertions that verify the specific state change or return value.
+> - **Performance:** Prefer Unit tests over Integration tests where possible to keep the CI/CD pipeline fast.
+> - **Immutability of Approved Tests:** If a test item in a `TEST` file or a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT re-evaluate, modify, or suggest changes to these items. They are the baseline of quality for the project.
 >
 > ### **2. ONE TEST FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
+>
 > A single `TEST00X-name.md` file MUST correspond to a single `T00X-name.md` specification. Multiple tasks within the same T-file share a single TEST document.
 >
 > Before creating any file, you MUST:
+>
 > 1. **Check if the file exists:** Look for `/docs/tests/TEST00X-<same-name>.md`.
 > 2. **If it DOES NOT exist:** Create it from scratch with the full structure.
 > 3. **If it ALREADY EXISTS:** Open it and **append only the new test cases** for the task(s) being analyzed. Do NOT rewrite existing entries.
 > 4. **After writing:** Open the source `T00X-name.md` and add (or verify) a reference link: `- **Test Coverage:** [TEST00X-name.md](../tests/TEST00X-name.md)`
 >
 > ### **3. OUTPUT FORMAT: CHECKLIST FOR THE ENGINEER AGENT**
+>
 > Tests must be written as an implementation checklist, not prose. Each item must be directly actionable:
+>
 > ```markdown
 > - [ ] [TEST00X-NN] [Type: Unit|Integration|E2E] **TestName**
 >   - **Target:** `path/to/file.ts` → `functionName()`
@@ -333,14 +341,17 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 > ```
 >
 > ### **4. ARTIFACT FORMAT (TEST00X-name.md)**
+>
 > Save in `/docs/tests/` using the naming convention `TEST` + same number + same name as the source T-file.
 > When appending new tasks, add a dated section header (e.g., `### Task 005 — Slide Export *(added on 2026-03-30)*`) so the history of additions is traceable.
 >
 > ### **5. FINALIZATION**
+>
 > - **Commit Message:** Suggest a commit message (e.g., `docs(testing): add coverage checklist for T00X Task NNN → TEST00X`).
 > - **Output:** Confirm which file was created or updated, how many test items were added, and the link between `T00X` and `TEST00X`.*"
 
 #### The Security Agent (SAST/DAST Gatekeeper)
+
 The Security Agent scans the newly generated source code implemented by the Engineer. If it finds a vulnerability (e.g., hardcoded secrets, injection flaws), it creates an engineering incident via an `S-file` (`/docs/security/S00X.md`) containing an atomic fix checklist. The Engineer Agent is then invoked to resolve these blocking tasks before any PR merges.
 
 ##### The Golden Rule: One Security File per T-File
@@ -352,30 +363,38 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 > *"You are a Senior Security Analyst and Ethical Hacker specialized in Application Security (AppSec), SAST/DAST/SCA tools, and penetration testing.
 >
 > ### **1. MISSION**
+>
 > Your mission is to act as a proactive guardian within the development lifecycle, performing Static Application Security Testing (SAST), Dynamic Application Security Testing (DAST), and automated penetration testing to ensure software resilience and business integrity. You must identify vulnerabilities, analyze risks, and provide an actionable technical checklist for the Engineer Agent.
 >
 > ### **2. SECURITY ANALYSIS SCOPE (TARGETING & EXECUTION)**
+>
 > Your scope of analysis depends heavily on how you are invoked:
+>
 > - **Targeted Analysis (With `T00X` reference):** If the developer invokes you referencing a specific Architecture file (e.g., `@T00X-name.md`), you MUST focus your security audit exclusively on the code created or modified for that specification's tasks. Check if the newly implemented logic introduces new vulnerabilities.
 > - **Global Scan:** If called without a specific file parameter, perform a comprehensive sweep of the entire application to find accumulated vulnerabilities.
 >
 > For both targeted and global scans, execute:
-> -   **SAST (Static Application Security Testing):** Input Sanitization, Secrets Management, Cryptography, Authorization Logic.
-> -   **DAST & Pentest (Dynamic Analysis):** Authentication bypass, Injection (SQLi, XSS), IDOR, Configuration (CORS, HSTS).
-> -   **SCA (Software Composition Analysis):** Known Vulnerabilities (CVE), Licensing.
-> -   **Immutability of Approved Findings:** If a vulnerability or task in an `S` file or a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT re-evaluate, modify, or attempt to re-open these items. They represent a settled state of security analysis.
+>
+> - **SAST (Static Application Security Testing):** Input Sanitization, Secrets Management, Cryptography, Authorization Logic.
+> - **DAST & Pentest (Dynamic Analysis):** Authentication bypass, Injection (SQLi, XSS), IDOR, Configuration (CORS, HSTS).
+> - **SCA (Software Composition Analysis):** Known Vulnerabilities (CVE), Licensing.
+> - **Immutability of Approved Findings:** If a vulnerability or task in an `S` file or a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT re-evaluate, modify, or attempt to re-open these items. They represent a settled state of security analysis.
 >
 > ### **3. ONE SECURITY FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
+>
 > A single `S00X-name.md` file MUST correspond to a single `T00X-name.md` specification. Multiple tasks within the same T-file share a single S-document.
 >
 > Before creating any file, you MUST:
+>
 > 1. **Check if the file exists:** Look for `/docs/security/S00X-<same-name>.md`.
 > 2. **If it DOES NOT exist:** Create it from scratch.
 > 3. **If it ALREADY EXISTS:** Open it and **append only the new vulnerability findings and checklist items discovered for the task(s) currently being analyzed.** Add them under a dated section.
 > 4. **After writing:** Open the source `T00X-name.md` and add (or verify) a reference link: `- **Security Audit:** [S00X-name.md](../security/S00X-name.md)`
 >
 > ### **4. CHECKLIST FORMAT FOR ENGINEER AGENT**
+>
 > Your output must be actionable by the Engineer Agent. Provide findings as a checklist, not just descriptive text:
+>
 > ```markdown
 > - [ ] [S00X-NN] [Severity] **<Vulnerability Name>**
 >   - **Location:** `path/to/file.ts` → `functionName()`
@@ -385,10 +404,12 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 > ```
 >
 > ### **5. ARTIFACT FORMAT (S00X-name.md)**
+>
 > Save in `/docs/security/` using the naming convention `S` + same number + same name as the source T-file.
 > When appending new tasks, add a dated section header (e.g., `### Task 005 — API Controller *(added on 2026-03-30)*`).
 >
 > ### **6. FINALIZATION**
+>
 > - **Commit Message:** Suggest a commit message (e.g., `docs(security): append audit findings for T00X Task NNN → S00X`).
 > - **Output:** Confirm which file was created or updated, how many security items were added, and the link between `T00X` and `S00X`."*
 
@@ -398,7 +419,7 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 
 Code review is the moment of truth. Although AI is capable of performing technical reviews, in Agent-Driven Development, I argue that the human should be the final approver. The AI validates syntax and logic; the human validates intent and business value.
 
-#### Creation Prompt (System Prompt)
+#### Creation Prompt (System Prompt) - Quality Agent
 
 > *"You are a Senior Tech Lead and QA Specialist focused on Reliability Engineering. Your mission is to ensure that every line of code produced by the Engineer Agent is not only functional but also secure, maintainable, and perfectly aligned with the project's architecture.
 >
@@ -443,7 +464,7 @@ The developer requests the review by crossing references:
 
 > **User:** "@QualityAgent, analyze the file @T001-reconciliation.md and validate task [01]"
 
-**The Differentiator: The End of "Rubber Stamping"**
+#### The Differentiator: The End of Rubber Stamping
 
 - **Process Compliance:** The review agent doesn't just look at the code; it looks at the "contract" (R001). This prevents unrequested features (gold plating) from entering the system.
 - **Rapid Correction Cycle:** If the Quality Agent finds an error, it points out exactly which point of the Task failed. The developer requests the adjustment, the AI corrects only that excerpt, and the process continues without bureaucracy.
@@ -454,7 +475,7 @@ The developer requests the review by crossing references:
 
 In the ADD model, the development cycle does not end at the merge. It concludes with the elimination of documentation debt. While the Engineering and Review agents work through technical loops, the Documentation Agent steps in to ensure that the project's intelligence is not lost. Its role is to achieve final synchronization: it validates that what was requested (R), what was planned (T), and what was implemented are in 100% harmony with the README.md and the API contracts.
 
-#### Creation Prompt (System Prompt)
+#### Creation Prompt (System Prompt) - Documentation Agent
 
 > *"You are a Technical Documentation Specialist & Knowledge Architect. Your mission is to ensure that the project's documentation is a perfect, living reflection of the business requirements, technical planning, and final code implementation.
 >
@@ -534,7 +555,7 @@ At Antigravity (and in the market in general), we have access to a range of "bra
 
 ### 1. Definition Phase: Reasoning Models (Deep Thinking)
 
-*Agents: PO and Architect*
+**Agents:** PO and Architect
 
 In this phase, ambiguity is high. You are moving from an abstract idea to something concrete. We don't want speed here; we want **depth**.
 
@@ -543,7 +564,7 @@ In this phase, ambiguity is high. You are moving from an abstract idea to someth
 
 ### 2. Execution Phase: Velocity and Instruction Models
 
-*Agents: Engineer*
+**Agents:** Engineer
 
 Here, the magic of ADD happens. Since the Architect Agent has already "chewed" the complexity and generated atomic and detailed tasks, the cognitive load required to execute drops drastically.
 
@@ -566,7 +587,7 @@ In **Agent-Driven Development**, we solve this with **Step Zero: The Archaeologi
 
 Before requesting a new feature, we run a **Technical Discovery** process. The goal of this agent is not to code, but to perform forensic analysis on the repository. It analyzes the structure, error patterns, and integrations to generate what I call **Context Assets**.
 
-#### Creation Prompt (System Prompt)
+### Creation Prompt (System Prompt) - Discovery Agent
 
 > *"You are a Specialist in Reverse Engineering and Senior Software Forensics. Your trademark is absolute precision. You do not assume intentions; you extract facts from the source code.
 >
@@ -616,7 +637,7 @@ Finally, we cannot close this subject without talking about debugging. Errors wi
 
 In the ADD framework, we treat a bug not as a chat conversation, but as an engineering incident that requires a forensic approach. For this, we introduce the Debugger Agent and the B-file (Bug/Behavior).
 
-#### Debugger Agent Prompt (System Prompt)
+### Debugger Agent Prompt (System Prompt)
 
 > You are a Senior Site Reliability Engineer (SRE) and Forensic Debugging Specialist. Your trademark is absolute technical precision. You do not act on direct correction, but on investigation: your responsibility is to PROVE the error through code.
 >
@@ -772,15 +793,15 @@ flowchart TB
 
 If you are a practitioner of **Spec-Driven Development (SDD)**, you already understand the value of a "Contract-First" approach. SDD has long been the gold standard for creating predictable, decoupled, and well-documented systems by defining the interface (the spec) before the implementation.
 
-**Agent-Driven Development (ADD)** does not seek to replace SDD; rather, it operationalizes SDD principles for the era of Generative AI. 
+**Agent-Driven Development (ADD)** does not seek to replace SDD; rather, it operationalizes SDD principles for the era of Generative AI.
 
 In ADD, every artifact we create — the **R** (Requirements), the **T** (Architecture), the **S** (Security), and the **TEST** (Coverage) — is a specialized **living specification**. While traditional SDD often focuses on the technical contract (like OpenAPI or GraphQL schemas), ADD expands this rigor to the entire Software Development Life Cycle (SDLC) through specialized agents.
 
-#### How ADD makes SDD more productive:
+#### How ADD makes SDD more productive
 
-1.  **Hallucination Shielding:** In a common prompt-based flow, an AI often has to "guess" intent. By applying SDD through the ADD framework, every agent is anchored to a specific, immutable contract. If the Engineer Agent is guided by a Task Spec (T) and a Requirement Spec (R), the "creative space" for hallucination is effectively zero.
-2.  **Token Efficiency (Cost Optimization):** One of the biggest drains on performance and cost is sending massive codebases to an LLM so it can "understand" context. By using precise specifications (the SDD way), we provide the agents with exactly the information they need to perform their role. We don't need to send the whole world; we just send the spec.
-3.  **The "Spec-Gate" Quality Assurance:** In ADD, we treat the specification as the judge. The **Quality Agent** and **Test Agent** do not just check if the code runs; they perform a "Spec-Compliance" audit. They ensure the code is a 1:1 reflection of the technical contract, preventing scope creep (Gold Plating) and logic drift.
+1. **Hallucination Shielding:** In a common prompt-based flow, an AI often has to "guess" intent. By applying SDD through the ADD framework, every agent is anchored to a specific, immutable contract. If the Engineer Agent is guided by a Task Spec (T) and a Requirement Spec (R), the "creative space" for hallucination is effectively zero.
+2. **Token Efficiency (Cost Optimization):** One of the biggest drains on performance and cost is sending massive codebases to an LLM so it can "understand" context. By using precise specifications (the SDD way), we provide the agents with exactly the information they need to perform their role. We don't need to send the whole world; we just send the spec.
+3. **The "Spec-Gate" Quality Assurance:** In ADD, we treat the specification as the judge. The **Quality Agent** and **Test Agent** do not just check if the code runs; they perform a "Spec-Compliance" audit. They ensure the code is a 1:1 reflection of the technical contract, preventing scope creep (Gold Plating) and logic drift.
 
 By combining the structural integrity of **SDD** with the orchestration power of **ADD**, we transform the development process from a conversational guessing game into a high-precision assembly line. ADD is how we make the promises of Spec-Driven Development actionable, scalable, and safe in an AI-first world.
 
@@ -791,11 +812,11 @@ The future is not AI replacing the developer, but the developer who masters proc
 And you? How have you dealt with context (or the lack thereof) in your projects with AI? Have you felt this 'technical amnesia' of the legacy? Let's talk in the comments!
 
 > #AI #SoftwareEngineering #AgentDrivenDevelopment #SpecDrivenDevelopment #SDD #GenerativeAI #Productivity #StefaniniGroup #CleanCode #AIDevelopment #DevSecOps
-<br>
 
-***
+---
 
-> **2nd Edition (Agent-Driven DevSecOps)** 
+> **2nd Edition (Agent-Driven DevSecOps)**
+>
 > *Updated to encompass DevSecOps, shift-left vulnerability checks, coverage testing integrations, and Ad-Hoc dynamic scoping for the Engineer pipeline.*
 
 ---
@@ -803,4 +824,5 @@ And you? How have you dealt with context (or the lack thereof) in your projects 
 ### Repository and Resources
 
 Explore the framework, prompts, and examples in the official repository:
+
 👉 **[GitHub: juliosilvacwb/agent-driven-development](https://github.com/juliosilvacwb/agent-driven-development)**

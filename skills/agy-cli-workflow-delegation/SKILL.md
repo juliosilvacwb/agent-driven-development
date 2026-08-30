@@ -43,18 +43,21 @@ agy -p "/engineer-agent implement Task 001..." --dangerously-skip-permissions --
 To run multiple workflows concurrently with different results, trigger them in **separate, isolated commands** so they run in parallel without blocking each other.
 
 > [!IMPORTANT]
-> **Do NOT run multiple task initiations inside a single multi-line shell script or command block.** The Orchestrator agent must trigger each task in **separate, distinct shell interactions (separate `run_command` tool calls)**. 
+> **Do NOT run multiple task initiations inside a single multi-line shell script or command block.** The Orchestrator agent must trigger each task in **separate, distinct shell interactions (separate `run_command` tool calls)**.
 
 Because spawning multiple agents simultaneously (bursts) can exhaust the transient **RPM (Requests Per Minute)** or **TPM (Tokens Per Minute)** quotas of the Gemini API due to heavy initial context loading, you must:
+
 1. Trigger the first task using a single `run_command` tool call.
 2. **Wait 5 to 10 seconds** before making the next `run_command` tool call for the subsequent task.
 
-##### Command for the first task (executed in tool call #1):
+##### Command for the first task (executed in tool call #1)
+
 ```powershell
 agy -p "/engineer-agent implement Task 001..." --dangerously-skip-permissions --print-timeout 15m0s
 ```
 
-##### Command for the second task (executed in tool call #2, after a 5-10 seconds delay):
+##### Command for the second task (executed in tool call #2, after a 5-10 seconds delay)
+
 ```powershell
 agy -p "/engineer-agent implement Task 002..." --dangerously-skip-permissions --print-timeout 15m0s
 ```
@@ -72,11 +75,13 @@ The agent invoking this skill (the current agent in the chat) acts as the **cent
 
 On Windows, running the CLI in the background in parallel processes can result in the `AttachConsole failed` error or cause the process to hang indefinitely due to the `node-pty` / ConPTY library trying to allocate a terminal.
 
-To prevent this behavior, you **MUST** ensure the interactive shell and terminal sandbox are disabled in the CLI settings file. 
+To prevent this behavior, you **MUST** ensure the interactive shell and terminal sandbox are disabled in the CLI settings file.
 
-#### Mandatory Validation Before Triggering Subagents:
+#### Mandatory Validation Before Triggering Subagents
+
 1. **Locate the Settings File**: Check if the CLI settings file exists at `~/.gemini/antigravity-cli/settings.json` (typically `C:\Users\<username>\.gemini\antigravity-cli\settings.json`).
 2. **Verify Configuration**: Read the file and ensure it has the following configurations:
+
    ```json
    {
      "enableTerminalSandbox": false,
@@ -87,6 +92,7 @@ To prevent this behavior, you **MUST** ensure the interactive shell and terminal
      }
    }
    ```
+
 3. **Auto-Configure**: If `enableInteractiveShell` is `true`, missing, or the file does not exist:
    - Ask the user's permission to configure it.
    - Once approved, modify or create the settings file to set `"enableInteractiveShell": false` under `"tools" -> "shell"` **before** invoking any background `agy` commands.

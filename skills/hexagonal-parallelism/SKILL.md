@@ -11,7 +11,7 @@ This skill transforms Hexagonal Architecture from a mere "clean code" pattern in
 
 > **Every Technical Checklist MUST be structured in 3 Phases. Tasks within a phase are parallel-safe. Phases are sequential.**
 
-```
+```text
 Phase 1 → Domain      (parallel tasks, zero dependencies)
 Phase 2 → Ports       (parallel tasks, depends on Phase 1)
 Phase 3 → Adapters    (parallel tasks, depends on Phase 2) ← MAXIMUM PARALLELISM
@@ -26,7 +26,7 @@ Phase 3 → Adapters    (parallel tasks, depends on Phase 2) ← MAXIMUM PARALLE
 > *"We trigger multiple agents in parallel to implement pure business logic and entities. Zero infrastructure dependencies."*
 
 | Aspect | Rule |
-|--------|------|
+| -------- | ------ |
 | **What to build** | Entities, Value Objects, Domain Services, Domain Events, Enums, Custom Exceptions |
 | **Framework dependencies** | **NONE.** Zero framework annotations. Zero infrastructure imports. Pure language constructs only |
 | **Parallelism** | Leaf entities (no domain composition) are fully parallel. Composite entities must declare `Depends On` for their parts |
@@ -41,7 +41,7 @@ Although Phase 1 has zero *framework* dependencies, **domain objects can depend 
 Examples of intra-domain dependencies:
 
 | Entity | Depends On | Reason |
-|--------|-----------|--------|
+| -------- | ----------- | -------- |
 | `Order` | `OrderItem`, `OrderStatus` | Order contains a list of OrderItem and uses OrderStatus |
 | `OrderItem` | `Product` | OrderItem references a Product |
 | `OrderDomainService` | `Order`, `OrderItem` | Service operates on both entities |
@@ -70,7 +70,7 @@ Examples of intra-domain dependencies:
 > *"With the domain ready, agents define the interfaces. The contract is 'signed'."*
 
 | Aspect | Rule |
-|--------|------|
+| -------- | ------ |
 | **What to build** | Input Ports (use case interfaces), Output Ports (repository/gateway interfaces), Application Services (use case implementations), DTOs, Commands, Queries |
 | **Dependencies** | Depends **only on Phase 1** artifacts. References Port interfaces, never adapters |
 | **Parallelism** | Each use case and each port interface is an **independent task** |
@@ -96,7 +96,7 @@ Examples of intra-domain dependencies:
 > *"Since the ports are already defined, I can deploy an army of agents: one implements persistence (JPA/SQL), another the Web REST layer, and another the messaging consumers. All at the same time."*
 
 | Aspect | Rule |
-|--------|------|
+| -------- | ------ |
 | **What to build** | REST Controllers, JPA/Hibernate Repositories, Message Consumers/Producers, External API Clients, Mappers, Database Migrations, Configuration classes |
 | **Dependencies** | Depends **only on Phase 2** Port interfaces. **No adapter may reference another adapter** |
 | **Parallelism** | **MAXIMUM.** Every adapter is a fully independent task. The JPA agent has zero knowledge of the REST agent |
@@ -204,7 +204,7 @@ The Dependency Inversion Principle (DIP) is what makes the 3-phase model possibl
 
 > **High-level modules must not depend on low-level modules. Both must depend on abstractions (interfaces/ports).**
 
-```
+```text
 Domain (Phase 1)  ←  depends on NOTHING
      ↑
 Application/Ports (Phase 2)  ←  depends only on Domain
@@ -220,7 +220,7 @@ This unidirectional dependency flow guarantees that phases can be executed seque
 
 ### Java (Spring Boot)
 
-```
+```text
 com.app
 ├── domain                         ← Phase 1
 │   ├── model                      # Entities, Value Objects, Enums
@@ -244,7 +244,7 @@ com.app
 
 ### TypeScript (Next.js / Node.js)
 
-```
+```text
 src/
 ├── domain                         ← Phase 1
 │   ├── model                      # Entities, Value Objects, Enums
@@ -273,7 +273,7 @@ src/
 The Architect Agent MUST reject these patterns during planning:
 
 | Anti-Pattern | Why It Breaks Parallelism |
-|---|---|
+| --- | --- |
 | Domain entity with `@Entity` / `@Column` | Couples Phase 1 to Phase 3 — they become entangled and cannot be parallelized |
 | Use case directly instantiating a repository | Bypasses Port — adapter cannot be developed independently in Phase 3 |
 | Controller calling repository directly | Skips Phase 2 — creates a shortcut that prevents independent testing and parallel execution |

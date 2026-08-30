@@ -26,7 +26,7 @@ Generates files in `/docs/product-strategy/` following the `PS00X-name.md` patte
 
 ## Position in the Pipeline
 
-```
+```text
 PM Agent (Ideation) → PO Agent (PRD) → Architect Agent (Roadmap) → ...
 ```
 

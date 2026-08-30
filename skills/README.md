@@ -5,7 +5,7 @@ Skills are reusable packages of knowledge that extend agent capabilities beyond 
 ## Available Skills
 
 | Skill | Description | Primary Consumer |
-|-------|-------------|-----------------|
+| --- | --- | --- |
 | [hexagonal-parallelism](./hexagonal-parallelism/) | Hexagonal Architecture as an industrial parallelism strategy. Maximizes decoupling to enable parallel task execution by AI agents. | Architect Agent |
 
 ## Structure

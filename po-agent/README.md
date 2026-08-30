@@ -34,8 +34,10 @@ Generates files in `/docs/business-requirements/` following the `R00X-name.md` p
 
 ## Example Calls
 
-> Direct: "Create a bank reconciliation module for the financial system, referencing the discovery findings in D001-current-logic.md"
+- **Direct:**
 
-> From PM Agent: "Create a PRD for the Smart Notifications feature based on PS001-engagement-features.md, Recommendation #2"
+  > "Create a bank reconciliation module for the financial system, referencing the discovery findings in D001-current-logic.md"
 
+- **From PM Agent:**
 
+  > "Create a PRD for the Smart Notifications feature based on PS001-engagement-features.md, Recommendation #2"
