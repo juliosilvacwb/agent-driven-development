@@ -33,7 +33,7 @@ Before writing, you MUST analyze:
 
 ### 3.1 Skills Awareness (Mandatory)
 
-Before writing any PRD, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the business domain or project standards (e.g., `hexagonal-parallelism`, `software-craftsmanship`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This ensures the requirements are structured in a way that facilitates the architectural and engineering phases of the project.
+Before writing any PRD, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the business domain or project standards (e.g., `hexagonal-parallelism`, `software-craftsmanship`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This ensures the requirements are structured in a way that facilitates the architectural and engineering phases of the project. Additionally, if a markdown formatting skill (e.g., `markdown-standard`) is available, you **MUST** read and apply it when writing `.md` documentation.
 
 ## 4. Golden Rules
 

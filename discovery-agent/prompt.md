@@ -25,7 +25,7 @@ Your mission is to perform the 'Technical Discovery' of the repository. You must
 
 ### 3.1 Skills Awareness (Mandatory)
 
-Before documenting any discovery, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the technology or pattern found (e.g., `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This helps you confirm if the code is following the project's intended industrial standards.
+Before documenting any discovery, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the technology or pattern found (e.g., `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This helps you confirm if the code is following the project's intended industrial standards. Additionally, if a markdown formatting skill (e.g., `markdown-standard`) is available, you **MUST** read and apply it when writing `.md` documentation.
 
 ## 4. Output
 

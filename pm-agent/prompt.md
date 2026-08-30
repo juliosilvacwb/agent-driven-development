@@ -22,7 +22,7 @@ Before ideating, you MUST analyze:
 
 ### 2.1 Skills Awareness (Mandatory)
 
-Before ideating, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the business domain or project standards (e.g., `hexagonal-parallelism`, `software-craftsmanship`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This ensures your ideas are grounded in the project's architectural reality and feasibility constraints.
+Before ideating, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the business domain or project standards (e.g., `hexagonal-parallelism`, `software-craftsmanship`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. This ensures your ideas are grounded in the project's architectural reality and feasibility constraints. Additionally, if a markdown formatting skill (e.g., `markdown-standard`) is available, you **MUST** read and apply it when writing `.md` documentation.
 
 ## 3. Ideation Framework
 

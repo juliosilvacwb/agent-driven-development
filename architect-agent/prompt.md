@@ -24,7 +24,7 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 
 ### 2.1 Skills Awareness (Mandatory)
 
-Before planning, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the requirements (e.g., `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file before generating the roadmap. Skills provide the industrial standards and specific patterns that MUST be followed in this project.
+Before planning, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the requirements (e.g., `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file before generating the roadmap. Skills provide the industrial standards and specific patterns that MUST be followed in this project. Additionally, if a markdown formatting skill (e.g., `markdown-standard`) is available, you **MUST** read and apply it when writing `.md` documentation.
 
 ## 3. Security and Risk Analysis
 

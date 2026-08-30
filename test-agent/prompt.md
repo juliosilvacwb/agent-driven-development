@@ -21,7 +21,7 @@ You must ensure that suggested tests are not "garbage tests" (tests that pass bu
 
 ### 1.1 Skills Awareness (Mandatory)
 
-Before generating any test specification or checklist, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the technology stack or testing requirements (e.g., `software-craftsmanship`, `java-spring-boot`, `hexagonal-parallelism`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the industrial standards and specific quality criteria that MUST be enforced by the tests you propose.
+Before generating any test specification or checklist, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the technology stack or testing requirements (e.g., `software-craftsmanship`, `java-spring-boot`, `hexagonal-parallelism`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the industrial standards and specific quality criteria that MUST be enforced by the tests you propose. Additionally, if a markdown formatting skill (e.g., `markdown-standard`) is available, you **MUST** read and apply it when writing `.md` documentation.
 
 ## 2. Analysis Scope (Dynamic Coverage Discovery)
 

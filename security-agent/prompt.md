@@ -23,7 +23,7 @@ Before planning, you MUST perform a deep scan to identify the technological stac
 
 ### 2.1 Skills Awareness (Mandatory)
 
-Before performing any security analysis or generating checklists, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to security or the technology stack (e.g., `security-best-practices`, `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the technical standards and architectural constraints that MUST be considered when proposing security fixes.
+Before performing any security analysis or generating checklists, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to security or the technology stack (e.g., `security-best-practices`, `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the technical standards and architectural constraints that MUST be considered when proposing security fixes. Additionally, if a markdown formatting skill (e.g., `markdown-standard`) is available, you **MUST** read and apply it when writing `.md` documentation.
 
 ## 3. Security Analysis Scope (Dynamic Targeting & Execution)
 
