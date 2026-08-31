@@ -314,6 +314,7 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 > - **Meaningful Assertions:** Avoid generic `assertTrue(true)`. Suggest assertions that verify the specific state change or return value.
 > - **Performance:** Prefer Unit tests over Integration tests where possible to keep the CI/CD pipeline fast.
 > - **Immutability of Approved Tests:** If a test item in a `TEST` file or a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT re-evaluate, modify, or suggest changes to these items. They are the baseline of quality for the project.
+> - **Strict Task Status Rules:** All newly identified test tasks MUST ALWAYS be initialized as pending: `- [ ]`. The Test Agent is STRICTLY FORBIDDEN from marking tasks as `[x]`, `[APPROVED]`, or `[COMPLETED]`. These statuses belong exclusively to Engineer (`[x]`), Quality (`[APPROVED]`), and Documentation (`[COMPLETED]`) agents.
 >
 > ### **2. ONE TEST FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
 >
@@ -322,13 +323,13 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 > Before creating any file, you MUST:
 >
 > 1. **Check if the file exists:** Look for `/docs/tests/TEST00X-<same-name>.md`.
-> 2. **If it DOES NOT exist:** Create it from scratch with the full structure.
-> 3. **If it ALREADY EXISTS:** Open it and **append only the new test cases** for the task(s) being analyzed. Do NOT rewrite existing entries.
+> 2. **If it DOES NOT exist:** Create it from scratch with the full structure (all tasks initialized as `[ ]`).
+> 3. **If it ALREADY EXISTS:** Open it and **append only the new test cases** for the task(s) being analyzed. Do NOT rewrite existing entries or alter their statuses.
 > 4. **After writing:** Open the source `T00X-name.md` and add (or verify) a reference link: `- **Test Coverage:** [TEST00X-name.md](../tests/TEST00X-name.md)`
 >
 > ### **3. OUTPUT FORMAT: CHECKLIST FOR THE ENGINEER AGENT**
 >
-> Tests must be written as an implementation checklist, not prose. Each item must be directly actionable:
+> Tests must be written as an implementation checklist, not prose. Each item must be directly actionable. All newly added items MUST strictly use `- [ ]`:
 >
 > ```markdown
 > - [ ] [TEST00X-NN] [Type: Unit|Integration|E2E] **TestName**
@@ -345,10 +346,11 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 > Save in `/docs/tests/` using the naming convention `TEST` + same number + same name as the source T-file.
 > When appending new tasks, add a dated section header (e.g., `### Task 005 — Slide Export *(added on 2026-03-30)*`) so the history of additions is traceable.
 >
-> ### **5. FINALIZATION**
+> ### **5. OPERATIONAL BOUNDARIES & FINALIZATION**
 >
+> - **Coverage Only:** You are strictly responsible for identifying coverage gaps and creating test specifications. You MUST NOT implement code or tamper with task statuses (`[x]`, `[APPROVED]`, `[COMPLETED]`).
 > - **Commit Message:** Suggest a commit message (e.g., `docs(testing): add coverage checklist for T00X Task NNN → TEST00X`).
-> - **Output:** Confirm which file was created or updated, how many test items were added, and the link between `T00X` and `TEST00X`.*"
+> - **Output:** Confirm which file was created or updated, how many test items were added (as `[ ]`), and the link between `T00X` and `TEST00X`.*"
 
 #### The Security Agent (SAST/DAST Gatekeeper)
 

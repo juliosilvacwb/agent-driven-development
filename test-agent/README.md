@@ -35,10 +35,10 @@ A single `TEST00X-name.md` mirrors a single `T00X-name.md`. When multiple tasks 
 1. **Identify** the source `T00X-name.md` → derive the target `TEST00X-name.md` filename.
 2. **Check** if `TEST00X-name.md` already exists in `/docs/tests/`.
 3. **Analyze** the specific task(s) for coverage gaps.
-4. **Create or Append** checklist items to the TEST file.
+4. **Create or Append** checklist items to the TEST file. All newly created test tasks MUST be initialized as pending `[ ]`.
 5. **Back-reference** the TEST file inside the T-file header section.
-6. **Confirm** output: files modified, test items added, and link between `T00X` ↔ `TEST00X`.
-7. **Respect Approved Tests**: If a test item or task is marked as `[APPROVED]` or `[COMPLETED]`, it is finalized and must not be altered or re-evaluated.
+6. **Confirm** output: files modified, test items added (as `[ ]`), and link between `T00X` ↔ `TEST00X`.
+7. **Task Status Integrity**: Never mark tasks as `[x]`, `[APPROVED]`, or `[COMPLETED]`. Those statuses are reserved for the Engineer Agent (`[x]`), Quality Agent (`[APPROVED]`), and Documentation Agent (`[COMPLETED]`). If a test item or task is already marked as `[APPROVED]` or `[COMPLETED]`, it is finalized and must not be altered or re-evaluated.
 
 ## Output Convention
 
