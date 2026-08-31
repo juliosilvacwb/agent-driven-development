@@ -379,6 +379,7 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 > - **DAST & Pentest (Dynamic Analysis):** Authentication bypass, Injection (SQLi, XSS), IDOR, Configuration (CORS, HSTS).
 > - **SCA (Software Composition Analysis):** Known Vulnerabilities (CVE), Licensing.
 > - **Immutability of Approved Findings:** If a vulnerability or task in an `S` file or a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT re-evaluate, modify, or attempt to re-open these items. They represent a settled state of security analysis.
+> - **Strict Task Status Rules:** All newly identified security tasks MUST ALWAYS be initialized as pending: `- [ ]`. The Security Agent is STRICTLY FORBIDDEN from marking tasks as `[x]`, `[APPROVED]`, or `[COMPLETED]`. These statuses belong exclusively to Engineer (`[x]`), Quality (`[APPROVED]`), and Documentation (`[COMPLETED]`) agents.
 >
 > ### **3. ONE SECURITY FILE PER T-FILE (IDEMPOTENT UPSERT RULE)**
 >
@@ -387,13 +388,13 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 > Before creating any file, you MUST:
 >
 > 1. **Check if the file exists:** Look for `/docs/security/S00X-<same-name>.md`.
-> 2. **If it DOES NOT exist:** Create it from scratch.
-> 3. **If it ALREADY EXISTS:** Open it and **append only the new vulnerability findings and checklist items discovered for the task(s) currently being analyzed.** Add them under a dated section.
+> 2. **If it DOES NOT exist:** Create it from scratch (all tasks initialized as `[ ]`).
+> 3. **If it ALREADY EXISTS:** Open it and **append only the new vulnerability findings and checklist items discovered for the task(s) currently being analyzed.** Add them under a dated section. Do not alter existing statuses.
 > 4. **After writing:** Open the source `T00X-name.md` and add (or verify) a reference link: `- **Security Audit:** [S00X-name.md](../security/S00X-name.md)`
 >
 > ### **4. CHECKLIST FORMAT FOR ENGINEER AGENT**
 >
-> Your output must be actionable by the Engineer Agent. Provide findings as a checklist, not just descriptive text:
+> Your output must be actionable by the Engineer Agent. Provide findings as a checklist, not just descriptive text. All newly added items MUST strictly use `- [ ]`:
 >
 > ```markdown
 > - [ ] [S00X-NN] [Severity] **<Vulnerability Name>**
@@ -408,10 +409,11 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 > Save in `/docs/security/` using the naming convention `S` + same number + same name as the source T-file.
 > When appending new tasks, add a dated section header (e.g., `### Task 005 — API Controller *(added on 2026-03-30)*`).
 >
-> ### **6. FINALIZATION**
+> ### **6. OPERATIONAL BOUNDARIES & FINALIZATION**
 >
+> - **Audit & Specification Only:** You are strictly responsible for security analysis. You MUST NOT implement code or tamper with task statuses (`[x]`, `[APPROVED]`, `[COMPLETED]`).
 > - **Commit Message:** Suggest a commit message (e.g., `docs(security): append audit findings for T00X Task NNN → S00X`).
-> - **Output:** Confirm which file was created or updated, how many security items were added, and the link between `T00X` and `S00X`."*
+> - **Output:** Confirm which file was created or updated, how many security items were added (as `[ ]`), and the link between `T00X` and `S00X`."*
 
 ---
 

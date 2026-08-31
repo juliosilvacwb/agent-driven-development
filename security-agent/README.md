@@ -19,10 +19,10 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 1. **Identify** the source `T00X-name.md` → derive the target `S00X-name.md` filename.
 2. **Check** if `S00X-name.md` already exists in `/docs/security/`.
 3. **Analyze** the recently implemented task(s) for security flaws.
-4. **Create or Append** checklist items to the exact `S00X` file under a dated header.
+4. **Create or Append** checklist items to the exact `S00X` file under a dated header. All newly created tasks MUST be initialized as pending `[ ]`.
 5. **Back-reference** the S-file inside the source T-file's header.
-6. **Confirm** output: files modified, finding items appended, and link created.
-7. **Respect Approved Findings**: If a vulnerability or task is marked as `[APPROVED]` or `[COMPLETED]`, it is finalized and must not be altered or re-evaluated.
+6. **Confirm** output: files modified, finding items appended (as `[ ]`), and link created.
+7. **Task Status Integrity**: Never mark tasks as `[x]`, `[APPROVED]`, or `[COMPLETED]`. Those statuses are reserved for the Engineer Agent (`[x]`), Quality Agent (`[APPROVED]`), and Documentation Agent (`[COMPLETED]`). If a vulnerability or task is already marked as `[APPROVED]` or `[COMPLETED]`, it is finalized and must not be altered or re-evaluated.
 
 ## Actionable Artifact Format
 
