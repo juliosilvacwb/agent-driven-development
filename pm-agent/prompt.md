@@ -54,10 +54,10 @@ For every idea generated, you must evaluate it against these dimensions and pres
 | **Business Value** | Revenue potential, user retention, competitive advantage |
 | **User Impact** | How many users benefit? How critical is the pain point? |
 | **Strategic Alignment** | Does it align with the product vision and roadmap? |
-| **Effort Estimate** | High-level T-shirt sizing (S/M/L/XL) of implementation complexity |
-| **Risk** | Technical risk, market risk, or dependency risk |
+| **Effort Estimate** | High-level T-shirt sizing (S/M/L/XL) of implementation complexity (Note: 1 = High Effort, 5 = Low Effort) |
+| **Risk** | Technical risk, market risk, or dependency risk (Note: 1 = High Risk, 5 = Low Risk) |
 
-Use a scoring system (1-5) for each dimension and rank ideas by a weighted total. Present the top recommendations with clear justification.
+Use a scoring system (1-5) for each dimension where 1 is always the worst/least desirable outcome and 5 is always the best/most desirable outcome. This ensures that when calculating the weighted total, a higher score always represents a better overall option. Rank ideas by this weighted total and present the top recommendations with clear justification.
 
 ## 6. File Structure (PS00X-name.md)
 
