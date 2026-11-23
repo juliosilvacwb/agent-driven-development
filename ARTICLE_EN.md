@@ -138,6 +138,7 @@ With specification **R** consolidated, the **Architect Agent** springs into acti
 > - **Maximum Reuse:** Check for existing utilities or services before suggesting new ones.
 > - **Dependency Guardian:** Avoid adding new libraries. If strictly necessary, JUSTIFY the use.
 > - **Atomic Tasks:** Break implementation into independent, small, and testable tasks.
+> - **Mandatory Final Build & Test Validation Task:** Every `T-file` roadmap MUST end with a final verification task (`[Test-Validation]`) that depends on ALL preceding tasks. During regular implementation tasks, tests are not executed after each task; this final task runs the full build and test suite and guarantees 100% of tests pass before moving to the `test-agent` validation phase.
 > - **Immutability of Finished Work:** If a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT modify or re-architect approved tasks.
 > - **No Code Implementation:** Your output must be exclusively the architectural plan and interface definitions. Do not write the final business logic.
 > - **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
@@ -163,8 +164,9 @@ With specification **R** consolidated, the **Architect Agent** springs into acti
 >
 > #### Technical Checklist (Atomic Tasks)
 >
-> - [ ] Task 001 - [Category]: Brief description (e.g., [Infra] Create Migration for 'orders' table).
-> - [ ] Task 002 - [Category]: Brief description (e.g., [Logic] Implement DiscountStrategy).
+> - [ ] Task 001 - [Category]: Brief description (Depends On: —) (e.g., `[Infra]` Create Migration for 'orders' table).
+> - [ ] Task 002 - [Category]: Brief description (Depends On: Task 001) (e.g., `[Logic]` Implement DiscountStrategy).
+> - [ ] Task NNN - [Test-Validation]: Execute full build and test suite and ensure all tests pass (Depends On: All preceding tasks).
 >
 > #### Task Detailing (Summary Tasks)
 >
@@ -198,11 +200,12 @@ Ref: R001
 - **Database:** New table bank_statements with index on transaction_hash.
 
 #### Atomic Tasks
-- [ ] [01] [Infra] Create Entity BankStatement and JPA Repository.
-- [ ] [02] [Infra] Create Flyway Migration for the new table.
-- [ ] [03] [Logic] Implement FileParser Interface and OFXParser class.
-- [ ] [04] [Logic] Create Reconciliation Service with deduplication rule.
-- [ ] [05] [API] Create POST /v1/statements/upload Controller.
+- [ ] [01] [Infra] Create Entity BankStatement and JPA Repository (Depends On: —).
+- [ ] [02] [Infra] Create Flyway Migration for the new table (Depends On: 01).
+- [ ] [03] [Logic] Implement FileParser Interface and OFXParser class (Depends On: 01).
+- [ ] [04] [Logic] Create Reconciliation Service with deduplication rule (Depends On: 01, 03).
+- [ ] [05] [API] Create POST /v1/statements/upload Controller (Depends On: 04).
+- [ ] [06] [Test-Validation] Execute full build and test suite and ensure all tests pass (Depends On: 01..05).
 ```
 
 **The Differentiator:** In the ADD model, this checklist is what we call a **"Context Map"**. It ensures the work is sliced. If the AI tries to do everything at once, the chance of error is high. By directing the agent to a specific index (R001 -> T001), we ensure it doesn't mix contexts from other features.
@@ -212,7 +215,32 @@ Ref: R001
 
 ---
 
-### 3. Engineer Agent (TDD): Atomic Implementation
+### 3. Orchestrator Agent: Native Subagent Assembly Line
+
+Once the Architect's `T-file` roadmap is approved, executing tasks one by one manually can become a bottleneck. The **Orchestrator Agent ("The Conductor")** automates the execution of roadmaps (`T`, `B`, `S`, or `TEST` files) by managing an assembly line of specialized subagents without ever writing application code itself.
+
+#### Native Subagents & Cost-Effective Model Routing
+
+Modern AI coding platforms (**Antigravity, Claude Code, Codex, Gemini, Kiro**, etc.) provide **native subagent capabilities** out of the box. Instead of shelling out to external CLI wrappers or relying on fragile CLI delegation skills, the Orchestrator delegates directly through the host platform's built-in subagent mechanism:
+
+- **Zero CLI Dependencies:** No external CLI binaries or delegation skills are needed; the Orchestrator follows its prompt and dispatches `engineer-agent` subagents natively.
+- **Cost-Effective Model Selection:** When the platform supports choosing a model per subagent, the Orchestrator routes each task to the most cost-effective tier for its complexity:
+  - **Fast / Lightweight Tier** (e.g., Flash, Haiku, Mini) for well-specified, repetitive, or low-complexity tasks (DTOs, entities, simple unit tests, routine build/test runs).
+  - **Balanced / Standard Tier** for standard business logic, use cases, adapters, and routine bugfixes.
+  - **High-Reasoning Tier** (e.g., Pro, Opus, Reasoning) for high-complexity or high-risk tasks (intricate algorithms, concurrency, security fixes, or complex validation failures).
+
+#### The Two-Stage Execution Model
+
+To maximize speed while preventing parallel build conflicts, the Orchestrator follows a strict two-stage pipeline for `T-files`:
+
+1. **Stage 1 — Parallel Implementation (No Test Execution):** Dispatches all unblocked tasks in the active phase to parallel `engineer-agent` subagents **without** `--test=true`. Each subagent implements the code and unit tests and marks its task `[x]`, without running intermediate builds after every task.
+2. **Stage 2 — Final Synchronous Validation (`[Test-Validation]`):** Only after **all** preceding implementation tasks are marked `[x]`, the Orchestrator invokes a single `engineer-agent` synchronously with `--test=true` to execute the Architect's final **`[Test-Validation]`** task. Only when 100% of tests pass can the pipeline proceed to the `test-agent` coverage validation phase.
+
+> **Special Rule for `TEST` and `S` Files:** Unlike intermediate `T-file` tasks, implementations generated by the `test-agent` (`TEST00X`) and `security-agent` (`S00X`) **must always run the test suite upon completion** (`--test=true`), executed synchronously so every new test or security fix is verified immediately.
+
+---
+
+### 4. Engineer Agent (TDD): Atomic Implementation
 
 With the task checklist in hand, the **Engineer Agent** enters the scene. To ensure maximum precision and reuse in complex projects, where multiple specifications and task lists might exist, we use an **Indexing System**.
 
@@ -252,9 +280,11 @@ I usually number the files to facilitate location via `@` in the chat:
 > - **Zero Hardcoding:** Do not put credentials or URLs in the code. Use environment variables.
 > - **Structured Logs:** Add INFO logs at the beginning of important flows and ERROR logs with stacktraces in catch blocks.
 >
-> **5. WORKFLOW (STRICT TDD)**
+> **5. WORKFLOW (STRICT TDD & TEST EXECUTION RULES)**
 >
 > - **Tests First:** Create unit tests (prioritizing edge cases). Code is only functionally "done" with 100% coverage.
+> - **No Automatic Build/Test on Intermediate `T-file` Tasks:** During regular implementation tasks from `T-files`, do NOT execute build or test commands after each task (avoiding parallel build conflicts). Full test execution happens in the Architect's final `[Test-Validation]` task (or when `--test=true` is explicitly passed).
+> - **Mandatory Test Execution for `TEST`, `S`, and `[Test-Validation]` Tasks:** You MUST execute build and test commands upon completion whenever implementing tasks from `TEST` (`test-agent`) or `S` (`security-agent`) files, executing the final `[Test-Validation]` task of a `T-file`, or when `--test=true` is provided. Only mark the task as `[x]` once tests pass.
 > - **Implementation:** Develop the code to pass the tests, respecting Clean Code and SOLID.
 > - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 >
@@ -285,13 +315,13 @@ By working with this addressing (R001, T001), we eliminate ambiguities. The gene
 
 ---
 
-### 4. Shifting Left: The DevSecOps Evolution (Test & Security)
+### 5. Shifting Left: The DevSecOps Evolution (Test & Security)
 
 Modern software engineering demands resiliency. We cannot treat security as a patch applied before deployment or test coverage as an afterthought. To scale our DevSecOps capabilities safely with AI, we integrated two specialized guardians into the ADD pipeline:
 
 #### The Test Agent (Quality Forensics)
 
-While the Engineer Agent practices TDD, complex logic can sometimes bypass initial designs. Once the Engineer completes a task, the Test Agent runs a delta analysis to check branch coverage and unmocked connections. It then updates a single, consolidated coverage document — the `TEST-file` (`/docs/tests/TEST00X.md`) — that is shared across **all tasks of the same T-file**.
+While the Engineer Agent practices TDD, complex logic can sometimes bypass initial designs. **Only after all engineering tasks and the Architect's final `[Test-Validation]` task in `T00X` have passed**, the Test Agent runs a delta analysis to check branch coverage and unmocked connections. It then updates a single, consolidated coverage document — the `TEST-file` (`/docs/tests/TEST00X.md`) — that is shared across **all tasks of the same T-file**. When the Engineer Agent subsequently implements items from this `TEST-file`, it **always executes the test suite upon completion** to verify the new tests pass.
 
 ##### The Golden Rule: One TEST File per T-File
 
@@ -348,13 +378,14 @@ This prevents coverage fragmentation: instead of a dozen `TEST007-task-001.md`, 
 >
 > ### **5. OPERATIONAL BOUNDARIES & FINALIZATION**
 >
-> - **Coverage Only:** You are strictly responsible for identifying coverage gaps and creating test specifications. You MUST NOT implement code or tamper with task statuses (`[x]`, `[APPROVED]`, `[COMPLETED]`).
+> - **Prerequisite Gate (`T-files`):** Before analyzing a `T00X` file, verify that all engineering tasks and the Architect's final `[Test-Validation]` task are completed (`[x]`, `[APPROVED]`, or `[COMPLETED]`). If still pending, HALT until engineering validation passes.
+> - **Coverage Only:** You are strictly responsible for identifying coverage gaps and creating test specifications. You MUST NOT implement code or tamper with task statuses (`[x]`, `[APPROVED]`, `[COMPLETED]`). (When the Engineer Agent later implements `TEST` tasks, executing the test suite upon completion is mandatory.)
 > - **Commit Message:** Suggest a commit message (e.g., `docs(testing): add coverage checklist for T00X Task NNN → TEST00X`).
 > - **Output:** Confirm which file was created or updated, how many test items were added (as `[ ]`), and the link between `T00X` and `TEST00X`.*"
 
 #### The Security Agent (SAST/DAST Gatekeeper)
 
-The Security Agent scans the newly generated source code implemented by the Engineer. If it finds a vulnerability (e.g., hardcoded secrets, injection flaws), it creates an engineering incident via an `S-file` (`/docs/security/S00X.md`) containing an atomic fix checklist. The Engineer Agent is then invoked to resolve these blocking tasks before any PR merges.
+The Security Agent scans the newly generated source code implemented by the Engineer. If it finds a vulnerability (e.g., hardcoded secrets, injection flaws), it creates an engineering incident via an `S-file` (`/docs/security/S00X.md`) containing an atomic fix checklist. The Engineer Agent is then invoked to resolve these blocking tasks — **always running the test suite upon completion** to confirm the fix and prevent regressions — before any PR merges.
 
 ##### The Golden Rule: One Security File per T-File
 
@@ -413,13 +444,13 @@ Similar to the Test Agent, the Security Agent enforces an **Idempotent Upsert Ru
 >
 > ### **6. OPERATIONAL BOUNDARIES & FINALIZATION**
 >
-> - **Audit & Specification Only:** You are strictly responsible for security analysis. You MUST NOT implement code or tamper with task statuses (`[x]`, `[APPROVED]`, `[COMPLETED]`).
+> - **Audit & Specification Only:** You are strictly responsible for security analysis. You MUST NOT implement code or tamper with task statuses (`[x]`, `[APPROVED]`, `[COMPLETED]`). (When the Engineer Agent later implements fixes from an `S-file`, executing the test suite upon completion is mandatory.)
 > - **Commit Message:** Suggest a commit message (e.g., `docs(security): append audit findings for T00X Task NNN → S00X`).
 > - **Output:** Confirm which file was created or updated, how many security items were added (as `[ ]`), and the link between `T00X` and `S00X`."*
 
 ---
 
-### 5. Quality Agent (Review): The Gatekeeper
+### 6. Quality Agent (Review): The Gatekeeper
 
 Code review is the moment of truth. Although AI is capable of performing technical reviews, in Agent-Driven Development, I argue that the human should be the final approver. The AI validates syntax and logic; the human validates intent and business value.
 
@@ -475,9 +506,9 @@ The developer requests the review by crossing references:
 
 ---
 
-### 6. Documentation Agent: The Guardian of the "Single Source of Truth"
+### 7. Documentation Agent: The Guardian of the "Single Source of Truth"
 
-In the ADD model, the development cycle does not end at the merge. It concludes with the elimination of documentation debt. While the Engineering and Review agents work through technical loops, the Documentation Agent steps in to ensure that the project's intelligence is not lost. Its role is to achieve final synchronization: it validates that what was requested (R), what was planned (T), and what was implemented are in 100% harmony with the README.md and the API contracts.
+In the ADD model, the development cycle does not end at the merge. It concludes with the elimination of documentation debt. While the Engineering and Review agents work through technical loops, the Documentation Agent steps in to ensure that the project's intelligence is not lost. Its role is to achieve final synchronization: it validates that what was requested (R), what was planned (T), and what was implemented are in 100% harmony with the `README.md`, `CHANGELOG.md`, and API contracts — while verifying available Markdown skills (such as `markdown-standard`) before creating or editing any `.md` file to guarantee clean formatting and zero `markdownlint` violations.
 
 #### Creation Prompt (System Prompt) - Documentation Agent
 
@@ -509,6 +540,7 @@ In the ADD model, the development cycle does not end at the merge. It concludes 
 > - **Immutability of Approved Content:** If a requirement (R), technical plan (T), or bugfix plan (B) is marked as `[APPROVED]` or `[COMPLETED]`, its corresponding documentation sections are considered final. You MUST NOT propose changes that contradict approved or completed specifications.
 > - **Task Completion Status:** After completing the documentation sync for a feature or incident/task, you MUST update all associated task lists in technical roadmaps (T-files), bugfix plans (B-files), security audits (S-files), and test coverage specifications (TEST-files). Change the status of documented tasks from `[APPROVED]` or `[ ]` to `[COMPLETED]`. **DO NOT** use `[x]` or any other notation.
 > - **Human-Centric, Machine-Readable:** Write documentation that is easy for humans to read but structured enough (using Markdown, headers, and code blocks) to be easily parsed by development tools.
+> - **Skills Awareness & Markdown Lint Compliance (Mandatory):** Before creating or editing **any `.md` file**, check the available `<skills>` for Markdown formatting and linting guidelines (e.g., `markdown-standard`). If present, read its `SKILL.md` file and strictly enforce every rule (heading hierarchy, blank lines around headings/lists/code blocks/tables, list markers and indentation, fenced code languages, no bare URLs or inline HTML, no trailing spaces, single final newline) so all documentation passes `markdownlint` with zero violations.
 >
 > **4. FINALIZATION**
 >
@@ -575,7 +607,7 @@ Here, the magic of ADD happens. Since the Architect Agent has already "chewed" t
 - **What to use:** Fast and efficient models (e.g., *Gemini Flash*, *GPT-5-mini*).
 - **Why?** The Engineer Agent doesn't need to "reinvent the wheel" or philosophize about design patterns; it just needs to **obey** the plan outlined in the `.md` file. Small, well-defined tasks ("Create file X with function Y") are the perfect terrain for models that prioritize speed and *instruction following*. They act as the "Muscle".
 
-> **Insight:** By delegating the "thinking" to robust models and the "doing" to fast models, you optimize costs and drastically reduce cycle time, without sacrificing the quality guaranteed by initial planning.
+> **Insight:** By delegating the "thinking" to robust models and the "doing" to fast models — and letting the **Orchestrator Agent** dynamically route each native subagent task to the most cost-effective tier (Fast/Lightweight, Balanced, or High-Reasoning) based on task complexity — you optimize costs and drastically reduce cycle time, without sacrificing the quality guaranteed by initial planning.
 
 ---
 
@@ -738,22 +770,23 @@ flowchart TB
     
     R_Doc --> Arch["<b>Architect Agent</b>"]
     D_Doc -. Constraints .-> Arch
-    Arch -- Atomic Checklist --> T_Doc["docs/architecture/<b>T00X.md</b>"]
+    Arch -- Atomic Checklist + Test-Validation --> T_Doc["docs/architecture/<b>T00X.md</b>"]
     
-    T_Doc --> Eng["<b>Engineer Agent</b>"]
-    B_Doc --> Eng
+    T_Doc --> Orch["<b>Orchestrator Agent</b>"]
+    B_Doc --> Orch
+    Orch -- Native Subagents (Parallel) --> Eng["<b>Engineer Agent</b>"]
     
-    Eng -- Implements Code --> DevCode["Source Code"]
+    Eng -- Stage 2 Final Test-Validation --> DevCode["Source Code (Tests Green)"]
     
     %% Test Injection %%
     DevCode --> TestAgent["<b>Test Agent</b>"]
     TestAgent -- Coverage Gap Analysis --> Test_Doc["docs/tests/<b>TEST00X.md</b>"]
-    Test_Doc --> Eng
+    Test_Doc -- Mandatory Test Run --> Eng
 
     %% Security Injection %%
     DevCode --> SecAgent["<b>Security Agent</b>"]
     SecAgent -- Vulnerability Map --> S_Doc["docs/security/<b>S00X.md</b>"]
-    S_Doc --> Eng
+    S_Doc -- Mandatory Test Run --> Eng
     
     DevCode --> QA["<b>Quality Agent</b>"]
     R_Doc -. Criteria .-> QA
@@ -776,6 +809,7 @@ flowchart TB
     R_Doc:::docs
     Arch:::agent
     T_Doc:::docs
+    Orch:::agent
     SecAgent:::secagent
     S_Doc:::docs
     TestAgent:::testagent
@@ -819,9 +853,9 @@ And you? How have you dealt with context (or the lack thereof) in your projects 
 
 ---
 
-> **2nd Edition (Agent-Driven DevSecOps)**
+> **3rd Edition (Native Subagent Orchestration & DevSecOps Rigor)**
 >
-> *Updated to encompass DevSecOps, shift-left vulnerability checks, coverage testing integrations, and Ad-Hoc dynamic scoping for the Engineer pipeline.*
+> *Updated to introduce native subagent orchestration with cost-effective model routing (removing external CLI wrappers), the mandatory final `[Test-Validation]` gate before Test Agent analysis, automatic test execution for `TEST` and `S` implementations, and strict Markdown lint compliance via skills for the Documentation Agent.*
 
 ---
 

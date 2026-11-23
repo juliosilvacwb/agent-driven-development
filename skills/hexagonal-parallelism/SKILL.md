@@ -161,6 +161,9 @@ When generating a `T00X` file, the Architect Agent MUST organize tasks as follow
 - [ ] Task 016 - [Adapter-External]: Implement `StripePaymentAdapter`
 - [ ] Task 017 - [Adapter-Messaging-Out]: Implement `KafkaOrderEventPublisher`
 - [ ] Task 018 - [Adapter-Infra]: Create Flyway migration for `orders` table
+
+##### ✅ Final Validation Gate (Synchronous — Depends on ALL preceding tasks)
+- [ ] Task 019 - [Test-Validation]: Execute full build and test suite and ensure all tests pass (Depends On: Task 001..Task 018)
 ```
 
 ### Task Detail Template

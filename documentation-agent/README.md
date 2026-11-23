@@ -8,6 +8,7 @@ The **Documentation Agent** closes the loop in the ADD pipeline. Its job is to e
 - **Project Documentation Update**: Edits `README.md`, `CHANGELOG.md`, and any other core project docs.
 - **Mermaid Visualizations**: Generates and updates sequence diagrams, flowcharts, and ER diagrams.
 - **API and Contract Sync**: Ensures that Request/Response payloads in documentation match reality.
+- **Markdown Formatting & Lint Compliance**: Checks available skills (e.g., `markdown-standard`) before creating or editing any `.md` file to guarantee proper formatting and zero `markdownlint` violations.
 
 ## Behavior
 

@@ -79,11 +79,16 @@ For all implementations, adhere to:
 
 - **Unit Tests First (MANDATORY):** Always prioritize and implement Unit Tests (using Mocks/Mockito). Code is only functionally "done" when the test class is implemented with 100% logic coverage. This ensures architectural decoupling and testability from the start.
 - **Integration Test Exclusion:** Do NOT implement integration tests (DB, Spring Context, External APIs) during the atomic task execution. Your focus is 100% on unit tests for the current task. Integration tests are managed as separate tasks by the Architect Agent.
-- **No Automatic Build or Test (STRICT RULE):** To avoid conflicts during parallel execution (multiple agents working on the same project), you MUST NOT execute any command that triggers a compilation or test cycle (e.g., `mvn`, `npm build`, `gradle`, `pytest`) by default. You must rely on your internal logic and the files you've read to ensure code correctness.
-- **Build and Test Trigger (--test=true):** You are ONLY allowed to execute build or test commands if the user's prompt explicitly includes the flag `--test=true`. If the flag is present, use `-o` (Offline mode) and `-T 1C` (Parallel build) for Maven to minimize latency.
-- **Conflict Resilience:** If you are in `--test=true` mode and the build fails due to files you did NOT modify, do NOT attempt to fix it. This is likely a transient state from another agent. HALT and report the conflict to the user immediately.
+- **No Automatic Build or Test for Architecture Tasks (`T-files`) (STRICT RULE):** During regular implementation tasks from `T-files`, to avoid conflicts during parallel execution (multiple agents working on the same project), you MUST NOT execute any command that triggers a compilation or test cycle (e.g., `mvn`, `npm build`, `gradle`, `pytest`) after each task. Rely on your internal logic and the files you've read to ensure code correctness. Full test execution for a `T-file` happens ONLY during the final `[Test-Validation]` task defined by the Architect (or when `--test=true` is explicitly provided).
+- **Mandatory Test Execution for `TEST`, `S`, and `[Test-Validation]` Tasks:** You MUST execute build and test commands in ALL of the following cases:
+  - When implementing tasks from a **Test Agent** file (`TEST00X` / `TESTB00X`).
+  - When implementing fixes from a **Security Agent** file (`S00X` / `SB00X`).
+  - When executing the Architect's final **`[Test-Validation]`** task in a `T-file`.
+  - When the prompt explicitly includes the flag `--test=true`.
+  - When executing tests on Maven projects, use `-o` (Offline mode) and `-T 1C` (Parallel build) when possible to minimize latency. Only mark the task as `[x]` once the tests pass.
+- **Conflict Resilience:** If you are executing tests (via `--test=true`, `[Test-Validation]`, `TEST`, or `S` tasks) and the build fails due to files you did NOT modify, do NOT attempt to fix unrelated changes if they indicate a transient state from another parallel agent. HALT and report the conflict to the user immediately.
 - **Implementation:** Develop the code and the corresponding unit test, respecting Clean Code and SOLID.
-- **Handshake:** If `--test=true` was NOT used, your final response must include the statement: "I have implemented the code and tests. Tests were NOT executed because `--test=true` was not provided. To run the build and tests, re-invoke this task with the `--test=true` flag."
+- **Handshake:** If tests were NOT executed (regular `T-file` implementation task without `--test=true`), your final response must include the statement: "I have implemented the code and tests. Tests were NOT executed because this is an intermediate implementation task without `--test=true`. Full test execution will run in the final `[Test-Validation]` task (or when re-invoked with `--test=true`)."
 - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 
 ## 7. Finalization

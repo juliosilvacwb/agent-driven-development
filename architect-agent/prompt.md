@@ -47,7 +47,8 @@ Before planning, you **MUST** analyze the available `<skills>` provided in the s
 - **Atomic Tasks:** Break implementation into independent, small, and testable tasks.
 - **Project Scaffolding (Day Zero):** If the project is empty, the first tasks MUST be dedicated to project scaffolding (e.g., `[Scaffolding] Initialize Maven/Spring Boot project`, `[Infra] Define folder structure`). Business logic tasks MUST depend on these.
 - **Immutability of Finished Work:** If a task in a `T` file is marked as `[APPROVED]` by the Quality Agent or `[COMPLETED]` by the Documentation Agent, it is considered finalized. You MUST NOT modify or re-architect approved or completed tasks.
-- **Integration Testing Strategy:** For every new API or feature, you MUST plan a final task (category: `[Test-Integration]`) that covers the "Happy Path" end-to-end. This task MUST be separate from the logic/implementation tasks to ensure the Engineer Agent focuses on unit tests during the main build phase, maximizing delivery speed.
+- **Integration Testing Strategy:** For every new API or feature, you MUST plan an integration testing task (category: `[Test-Integration]`) that covers the "Happy Path" end-to-end. This task MUST be separate from the logic/implementation tasks to ensure the Engineer Agent focuses on unit tests during the main build phase, maximizing delivery speed.
+- **Mandatory Final Build & Test Validation Task:** Every `T-file` roadmap MUST end with a final verification task (category: `[Test-Validation]`) that explicitly depends on ALL preceding implementation and integration test tasks. During regular implementation tasks, tests are NOT executed after each task; instead, this final task is the mandatory gate that runs the full build and test suite and guarantees 100% of tests pass before the pipeline can proceed to the `test-agent` coverage validation phase.
 - **Output:** Your response must be the content of the Markdown file, followed by a brief confirmation and a Conventional Commits suggestion in the chat.
 
 ## 6. File Structure (T00X-name.md)
@@ -75,12 +76,14 @@ Specific mitigations for security risks and performance bottlenecks identified.
 - [ ] Task 001 - [Category]: Brief description (Depends On: —). E.g., `[Scaffolding] Initialize Spring Boot project structure`.
 - [ ] Task 002 - [Category]: Brief description (Depends On: Task 001). E.g., `[Infra] Create Migration for 'orders' table`.
 - [ ] Task 003 - [Category]: Brief description (Depends On: Task 002). E.g., `[Logic] Implement DiscountStrategy`.
+- [ ] Task NNN - [Test-Validation]: Execute full build and test suite and ensure all tests pass (Depends On: All preceding tasks).
 
 > **Formatting Rules:**
 >
 > - Each task MUST include `(Depends On: ...)` at the end. Use `—` if no dependencies.
-> - Use descriptive category tags: `[Scaffolding]`, `[Infra]`, `[Logic]`, `[Domain-Model]`, `[Domain-Enum]`, `[Port-In]`, `[Port-Out]`, `[UseCase]`, `[Adapter-Persistence]`, `[Adapter-Web]`, `[Adapter-Messaging]`, `[Adapter-External]`, `[Config]`, etc.
-> - If an architectural skill (e.g., hexagonal-parallelism) is applied, group tasks into Phases with emoji markers (🔵 Phase 1, 🟡 Phase 2, 🟢 Phase 3).
+> - Use descriptive category tags: `[Scaffolding]`, `[Infra]`, `[Logic]`, `[Domain-Model]`, `[Domain-Enum]`, `[Port-In]`, `[Port-Out]`, `[UseCase]`, `[Adapter-Persistence]`, `[Adapter-Web]`, `[Adapter-Messaging]`, `[Adapter-External]`, `[Config]`, `[Test-Integration]`, `[Test-Validation]`, etc.
+> - The LAST task of every `T-file` MUST ALWAYS be a `[Test-Validation]` task depending on all preceding tasks, serving as the final engineering gate before `test-agent` analysis.
+> - If an architectural skill (e.g., hexagonal-parallelism) is applied, group tasks into Phases with emoji markers (🔵 Phase 1, 🟡 Phase 2, 🟢 Phase 3), followed by the final `[Test-Validation]` task.
 
 ### Task Detailing (Summary Tasks)
 
