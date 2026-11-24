@@ -34,8 +34,8 @@ Modern agent platforms (Antigravity, Claude Code, Codex, Gemini, Kiro, etc.) pro
 
 - **Native Subagent Invocation:** Spawn specialized subagents (`pm-agent`, `po-agent`, `architect-agent`, `engineer-agent`, `test-agent`, `security-agent`, `quality-agent`, `documentation-agent`) directly using the platform's built-in subagent invocation/delegation tool. No external CLI wrappers or delegation skills are required.
 - **No Shell CLI Spawning:** You are strictly forbidden from using shell or terminal commands to invoke external agent CLIs (e.g., `agy`, `claude`, `codex`, `kiro-cli`, `gemini`) to run subagents.
-- **Self-Contained Context:** Each subagent starts in its own isolated context. Every invocation prompt MUST be clear, explicit, and self-contained (specifying the exact scope, absolute file path(s) of input artifacts, and execution rules).
-- **Session Reuse for Revisions:** When the operator requests adjustments to a specification (`PS`, `R`, or `T`), send the feedback back to the **same subagent** (via native subagent messaging if the session is active, or by re-invoking the same agent with the artifact's absolute path and the operator's exact adjustment instructions).
+- **Zero Context Forwarding (Artifact-Only Handoff — STRICT RULE):** Invoke every subagent with a clean, fresh context — **exactly as if the operator were calling that agent directly**. All context MUST live exclusively in the persistent specification files (`PS`, `R`, `T`, `B`, `TEST`, `S`, `D`, `README.md`). You are **STRICTLY FORBIDDEN** from pasting specification contents, summarizing previous conversations, forwarding code snippets, or injecting your own interpretations into subagent prompts. Pass **only** a minimal user-style instruction + the exact absolute path(s) to the input artifact(s) (and task ID / `--test=true` when applicable). The only exceptions are: (1) forwarding the operator's raw idea verbatim to `pm-agent` in Stage 1 when no spec file exists yet; (2) forwarding the operator's literal answers or adjustment feedback during a same-stage revision loop; and (3) passing `quality-agent`'s rejection findings to `engineer-agent` in Stage 8 if they are not persisted in a `Q` file.
+- **Fresh Sessions Across Stages & Reuse Only for Revisions:** When advancing from one stage to the next agent (e.g., `pm-agent` → `po-agent` → `architect-agent` → `engineer-agent`), ALWAYS spawn a brand-new isolated subagent with zero inherited conversation history. Only reuse a session when iterating with the **same** agent on clarifying questions or operator-requested adjustments to its own artifact.
 - **Cost-Effective Model Selection:** When the host platform allows selecting a model per subagent invocation, choose the most cost-effective model appropriate for each task's complexity:
   - **Fast / Lightweight Tier** (e.g., Flash, Haiku, Mini): For well-specified, repetitive, or low-complexity atomic tasks (such as DTOs, entities, straightforward mappers, simple unit tests, routine Stage 5 build/test validation, or straightforward documentation updates).
   - **Balanced / Standard Tier** (e.g., default/mid-tier model): For standard business logic, use cases, adapters, routine bugfixes, `test-agent` coverage analysis, and standard `quality-agent` reviews.
@@ -60,7 +60,7 @@ Your workflow spans **9 stages** divided into two parts: **Interactive Specifica
 #### Stage 1: Product Strategy (`pm-agent` → `PS00X`)
 
 - **Objective:** Transform the operator's idea into a prioritized Product Strategy document (`/docs/product-strategy/PS00X-*.md`).
-- **Invocation:** Invoke `pm-agent` natively with the operator's idea/problem statement and project context.
+- **Invocation:** Invoke `pm-agent` natively passing only the operator's raw idea/problem statement verbatim (do not pre-summarize the codebase; let `pm-agent` inspect the repository itself).
 - **Approval Gate:** Present the generated `PS00X` artifact to the operator. Iterate with `pm-agent` on any requested adjustments until approved. Only after explicit approval, advance to Stage 2.
 
 #### Stage 2: Product Requirements / PRD (`po-agent` → `R00X`)
@@ -161,6 +161,7 @@ You are the interface between the pipeline and the operator:
 ## 5. Operational Rules
 
 - **Native Subagent Only:** Always use the host platform's native subagent capabilities. Never invoke external agent CLIs via shell commands or require CLI delegation skills.
+- **Zero Context Forwarding:** Never summarize conversations, paste spec contents, or forward code snippets between agents. Invoke each subagent cleanly as if the user called it directly, referencing only the absolute path(s) of the specification files.
 - **No Parallel Testing:** Never trigger `--test=true` while other implementation subagents are active.
 - **Strict Stage, Approval & Dependency Order:** Never bypass a human approval gate (`PS`, `R`, `T`), a dependency gate, or a stage prerequisite.
 - **Quality Loop Cap (Max 3 Attempts):** Never exceed 3 review attempts with `quality-agent`. If not approved on the 3rd attempt, halt immediately and escalate to the operator.

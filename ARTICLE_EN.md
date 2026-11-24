@@ -223,7 +223,8 @@ Once the Architect's `T-file` roadmap is approved, executing tasks one by one ma
 
 Modern AI coding platforms (**Antigravity, Claude Code, Codex, Gemini, Kiro**, etc.) provide **native subagent capabilities** out of the box. Instead of shelling out to external CLI wrappers or relying on fragile CLI delegation skills, the Orchestrator delegates directly through the host platform's built-in subagent mechanism:
 
-- **Zero CLI Dependencies:** No external CLI binaries or delegation skills are needed; the Orchestrator follows its prompt and dispatches `engineer-agent` subagents natively.
+- **Zero CLI Dependencies:** No external CLI binaries or delegation skills are needed; the Orchestrator follows its prompt and dispatches specialized subagents natively.
+- **Zero Context Forwarding (Artifact-Only Handoff):** Each subagent is invoked in a fresh, isolated session — exactly as if the human developer called it directly — passing only a minimal command and the absolute path(s) to the specification file(s). The Orchestrator never forwards chat history, summaries, or code snippets, preserving Markdown specs as the single source of truth and eliminating context drift.
 - **Cost-Effective Model Selection:** When the platform supports choosing a model per subagent, the Orchestrator routes each task to the most cost-effective tier for its complexity:
   - **Fast / Lightweight Tier** (e.g., Flash, Haiku, Mini) for well-specified, repetitive, or low-complexity tasks (DTOs, entities, simple unit tests, routine build/test runs).
   - **Balanced / Standard Tier** for standard business logic, use cases, adapters, and routine bugfixes.

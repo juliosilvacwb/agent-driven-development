@@ -35,5 +35,6 @@ Use the Orchestrator when you want a single conductor to drive either the **enti
 ## Tools & Capabilities
 
 - **Native Subagent Delegation**: Uses the host platform's built-in subagent orchestration (e.g., Antigravity, Claude Code, Codex, Gemini, Kiro) — no external CLI wrappers or delegation skills required.
+- **Zero-Context Artifact Handoff**: Invokes every subagent cleanly as if called directly by the user — never forwarding conversation summaries or code snippets — so the `.md` specification files remain the sole source of truth.
 - **SDLC Artifacts (`PS`, `R`, `T`, `B`, `TEST`, `S`, `Q`)**: Full lifecycle coordination and status tracking.
 - **Human Gates & Quality Circuit Breakers**: Strict adherence to operator approval gates, task dependencies, and the 3-attempt quality review cap.
