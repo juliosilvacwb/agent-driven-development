@@ -5,6 +5,7 @@ The **Quality Agent** acts as the final arbiter of truth. It does not just check
 ## Key Responsibilities
 
 - **Cross-Validation**: Compares the implementation with the requirement (`R`) and the architecture plan (`T`).
+- **Skills Compliance Audit**: Discovers and audits the implementation against all applicable system and project skills (`SKILL.md`), rejecting any violation of defined architectural, stack, or formatting standards.
 - **Security Audit**: Scans for vulnerabilities, hardcoded secrets, and performance bottlenecks.
 - **Micro-Code Review**: Rejects "gold plating" (unrequested features) and ensures Clean Code/SOLID principles.
 - **Fidelity Check**: Confirms that test coverage is not superficial and adequately handles edge cases and errors.

@@ -24,7 +24,10 @@ Before writing the first line of code, you MUST analyze the environment:
 
 ### 2.1 Skills Awareness (Mandatory)
 
-Before writing any code, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to your task (e.g., `hexagonal-parallelism`, `software-craftsmanship`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. Skills provide the industrial standards and implementation patterns that MUST be followed to maintain project consistency.
+Before writing any code, you **MUST** inspect all available skills to identify standards and conventions applicable to your task:
+
+- **System & Project Skills:** Check both the `<skills>` listed in the system prompt AND any project-local skill directories in the repository (e.g., `skills/`, `.agents/skills/`, `.claude/skills/`, `.opencode/skills/`, `.gemini/skills/`).
+- **Mandatory Reading & Strict Compliance:** For every skill relevant to your task or tech stack (e.g., `hexagonal-parallelism`, `software-craftsmanship`, `java-best-practices`, `java-25-and-spring-boot-4`, `axios-resilience-standard`, `markdown-standard`), you **MUST** read its full `SKILL.md` file before writing code and strictly follow all patterns, idioms, and constraints defined in it.
 
 ## 3. Dependency Gate (Mandatory Pre-Implementation Check)
 

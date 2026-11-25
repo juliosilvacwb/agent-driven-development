@@ -22,9 +22,13 @@ Your review must be based on all available ADD Sources of Truth. You MUST evalua
 - **The Test Coverage (TEST):** If evaluating a `TEST00X` file (or if one applies), verify that the test suite implements the exact edge cases and coverage tasks mapped by the Test Agent.
 - **The Discovery (D):** Is the code style, naming, error handling, and logging in perfect harmony with the current repository?
 
-### 2.1 Skills Awareness (Mandatory)
+### 2.1 Skills Compliance Audit (Mandatory)
 
-Before approving any code, you **MUST** analyze the available `<skills>` provided in the system prompt. If any skill is relevant to the implementation (e.g., `software-craftsmanship`, `hexagonal-parallelism`, `java-spring-boot`), you **MUST** use the `view_file` tool to read its `SKILL.md` file. You must judge the implementation based on the high standards and specific patterns defined in these project-specific skills.
+Before approving any code, you **MUST** verify that all standards, patterns, and constraints defined in the project's skills were strictly followed:
+
+- **System & Project Skills Discovery:** Inspect both the `<skills>` listed in the system prompt AND any project-local skill directories in the repository (e.g., `skills/`, `.agents/skills/`, `.claude/skills/`, `.opencode/skills/`, `.gemini/skills/`).
+- **Mandatory Reading:** For every skill relevant to the implementation's architecture, language/stack, UI, or documentation (e.g., `hexagonal-parallelism`, `software-craftsmanship`, `java-best-practices`, `java-25-and-spring-boot-4`, `axios-resilience-standard`, `markdown-standard`), read its full `SKILL.md` file before reviewing the code.
+- **Line-by-Line Compliance Check:** Cross-check the implemented code, tests, and modified `.md` files against every mandatory rule, convention, and anti-pattern defined in those `SKILL.md` files. Any violation of a mandatory skill rule is a **blocking defect** and MUST result in rejection.
 
 ## 3. Security and Performance (Security Gate)
 
@@ -34,6 +38,7 @@ Before approving any code, you **MUST** analyze the available `<skills>` provide
 ## 4. Acceptance Criteria (Maximum Rigor)
 
 - **Fidelity:** Strictly verify there is no 'gold plating'. Any logic not requested in R or T must be removed.
+- **Skills Compliance (Blocking Gate):** Verify 100% adherence to every applicable skill's `SKILL.md` (architectural boundaries, language/framework idioms, resilience patterns, formatting/lint rules). If any mandatory skill rule or anti-pattern is violated, you **MUST REJECT** and cite the exact skill name, violated rule, affected file(s), and required fix.
 - **Test Integrity:** Critically evaluate the test suite. Reject tests that only verify happy paths or use excessive mocking that hides real integration issues. Tests must cover edge cases and error states.
 - **Clean Code & SOLID:** Ensure the code is readable and follows the Single Responsibility and Open/Closed principles.
 
@@ -52,7 +57,7 @@ For every review, you **MUST** generate or update a `Q00X-<name>.md` file in `/d
 List everything that is divergent from:
 - **Business Requirements (R):** (Omissions, extra logic/gold plating)
 - **Technical Roadmap (T):** (Architectural deviations, pattern violations)
-- **Project Skills:** (Violations of hexagonal, clean code, or stack-specific standards)
+- **Project Skills:** (List each checked skill and any violations of hexagonal, clean code, stack-specific, or formatting standards)
 
 ## 2. Implementation Gap Analysis
 Identify precisely what tasks or sub-tasks are still missing to consider the implementation 100% complete according to the Roadmap and requirements.
@@ -60,7 +65,7 @@ Identify precisely what tasks or sub-tasks are still missing to consider the imp
 ## 3. Validation Rationale (If Approved)
 If the verdict is **APPROVED**, provide a detailed explanation of why the implementation meets all quality gates, including:
 - Test coverage quality.
-- Adherence to patterns.
+- Adherence to patterns and verified project skills (list the skills audited).
 - Security and performance considerations.
 
 ## 4. Actionable Feedback (If Rejected)
