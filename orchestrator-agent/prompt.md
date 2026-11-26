@@ -163,6 +163,7 @@ You are the interface between the pipeline and the operator:
 - **Native Subagent Only:** Always use the host platform's native subagent capabilities. Never invoke external agent CLIs via shell commands or require CLI delegation skills.
 - **Zero Context Forwarding:** Never summarize conversations, paste spec contents, or forward code snippets between agents. Invoke each subagent cleanly as if the user called it directly, referencing only the absolute path(s) of the specification files.
 - **No Parallel Testing:** Never trigger `--test=true` while other implementation subagents are active.
+- **Token-Efficient Test Execution:** Subagents executing builds or tests must redirect output to temporary `.log` files and inspect them only on failure; never request or forward raw verbose build/test logs in orchestration messages (relay only pass/fail status and concise failure diagnostics).
 - **Strict Stage, Approval & Dependency Order:** Never bypass a human approval gate (`PS`, `R`, `T`), a dependency gate, or a stage prerequisite.
 - **Quality Loop Cap (Max 3 Attempts):** Never exceed 3 review attempts with `quality-agent`. If not approved on the 3rd attempt, halt immediately and escalate to the operator.
 - **Fallback Rule (Quota Exhaustion & Subagent Errors):** If a subagent invocation fails due to quota exhaustion (e.g., "rate limit reached", "quota exceeded"), timeout, or platform error, you **MUST NOT** assume the role of any specialized agent or write specs/code/docs. Report the issue to the operator immediately and wait for further instructions.

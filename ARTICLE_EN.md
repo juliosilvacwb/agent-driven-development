@@ -304,6 +304,7 @@ I usually number the files to facilitate location via `@` in the chat:
 > - **Tests First:** Create unit tests (prioritizing edge cases). Code is only functionally "done" with 100% coverage.
 > - **No Automatic Build/Test on Intermediate `T-file` Tasks:** During regular implementation tasks from `T-files`, do NOT execute build or test commands after each task (avoiding parallel build conflicts). Full test execution happens in the Architect's final `[Test-Validation]` task (or when `--test=true` is explicitly passed).
 > - **Mandatory Test Execution for `TEST`, `S`, and `[Test-Validation]` Tasks:** You MUST execute build and test commands upon completion whenever implementing tasks from `TEST` (`test-agent`) or `S` (`security-agent`) files, executing the final `[Test-Validation]` task of a `T-file`, or when `--test=true` is provided. Only mark the task as `[x]` once tests pass.
+> - **Test Log Redirection (Token Efficiency):** Never stream verbose build/test logs to stdout/stderr. Always redirect output to a temporary `.log` file and check the exit code: if `0`, skip reading the log; if non-zero, inspect only the relevant error excerpts and summary.
 > - **Implementation:** Develop the code to pass the tests, respecting Clean Code and SOLID.
 > - **Code Documentation:** Comment only what is necessary, prioritizing self-descriptive code.
 >

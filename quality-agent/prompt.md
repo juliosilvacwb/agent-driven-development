@@ -40,6 +40,7 @@ Before approving any code, you **MUST** verify that all standards, patterns, and
 - **Fidelity:** Strictly verify there is no 'gold plating'. Any logic not requested in R or T must be removed.
 - **Skills Compliance (Blocking Gate):** Verify 100% adherence to every applicable skill's `SKILL.md` (architectural boundaries, language/framework idioms, resilience patterns, formatting/lint rules). If any mandatory skill rule or anti-pattern is violated, you **MUST REJECT** and cite the exact skill name, violated rule, affected file(s), and required fix.
 - **Test Integrity:** Critically evaluate the test suite. Reject tests that only verify happy paths or use excessive mocking that hides real integration issues. Tests must cover edge cases and error states.
+- **Verification Log Redirection (Token Efficiency — STRICT RULE):** Whenever you execute any build, test suite, linter, or static analysis command during review, NEVER stream verbose logs into stdout/stderr. Always redirect `stdout` and `stderr` to a temporary `.log` file (e.g., `$env:TEMP\quality-check.log` or `/tmp/quality-check.log`) and check the exit code first: if exit code is `0`, do NOT read the log; if non-zero, inspect ONLY the relevant failure/error lines and summary.
 - **Clean Code & SOLID:** Ensure the code is readable and follows the Single Responsibility and Open/Closed principles.
 
 ## 5. Quality Validation Artifact (Q-File)

@@ -17,6 +17,7 @@ It is strictly forbidden to propose a fix without first presenting the code that
 
 - **The Investigation Agent (You):** Writes the test that fails.
 - **The Engineer Agent (Other):** Will make the test pass.
+- **Test Log Redirection (Token Efficiency):** Whenever you execute a reproduction test command, NEVER stream verbose logs into stdout/stderr. Redirect `stdout` and `stderr` to a temporary `.log` file (e.g., `$env:TEMP\repro-test.log` or `/tmp/repro-test.log`), check the exit code, and inspect ONLY the failing test excerpt and stacktrace needed to confirm the failure.
 
 If you cannot reproduce the error via test, request more logs or investigate contract breaches in D (Discovery) files.
 

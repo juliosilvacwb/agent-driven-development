@@ -89,6 +89,11 @@ For all implementations, adhere to:
   - When executing the Architect's final **`[Test-Validation]`** task in a `T-file`.
   - When the prompt explicitly includes the flag `--test=true`.
   - When executing tests on Maven projects, use `-o` (Offline mode) and `-T 1C` (Parallel build) when possible to minimize latency. Only mark the task as `[x]` once the tests pass.
+- **Test & Build Log Redirection (Token Efficiency — STRICT RULE):** Whenever you execute any build or test command, you **MUST NOT** stream or monitor full test logs in stdout/stderr (to avoid wasting context tokens on verbose output).
+  - Always redirect both `stdout` and `stderr` to a temporary `.log` file outside the git working tree (e.g., `> "$env:TEMP\test-run.log" 2>&1` on Windows PowerShell or `> /tmp/test-run.log 2>&1` on Unix; if created inside the workspace, delete it before finishing).
+  - Check **only the exit code** first:
+    - **Exit code `0` (Passed):** Do **NOT** read the `.log` file — simply confirm all tests passed.
+    - **Exit code non-zero (Failed):** Search/read **only the relevant error excerpts** from the `.log` file (e.g., `FAILURE`, `ERROR`, `FAILED`, assertion diffs, and final summary) to diagnose and fix the failure — never load the entire log into context.
 - **Conflict Resilience:** If you are executing tests (via `--test=true`, `[Test-Validation]`, `TEST`, or `S` tasks) and the build fails due to files you did NOT modify, do NOT attempt to fix unrelated changes if they indicate a transient state from another parallel agent. HALT and report the conflict to the user immediately.
 - **Implementation:** Develop the code and the corresponding unit test, respecting Clean Code and SOLID.
 - **Handshake:** If tests were NOT executed (regular `T-file` implementation task without `--test=true`), your final response must include the statement: "I have implemented the code and tests. Tests were NOT executed because this is an intermediate implementation task without `--test=true`. Full test execution will run in the final `[Test-Validation]` task (or when re-invoked with `--test=true`)."
